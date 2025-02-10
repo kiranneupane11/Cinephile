@@ -18,7 +18,7 @@ public class Main {
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();  
 
             switch (choice) {
                 case 1 -> addMovie();
@@ -120,8 +120,12 @@ public class Main {
         }
 
         System.out.println("Sort by: 1. Title  2. Release Year  3. Rating");
+        while (!scanner.hasNextInt()) {
+        System.out.println("Invalid input. Please enter a number.");
+        scanner.next(); // Consume invalid input
+        }
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine();  
 
         List<Movie> sortedMovies = switch (choice) {
             case 1 -> movieLists.get(listName).sortByTitle();
@@ -136,7 +140,9 @@ public class Main {
         if (sortedMovies != null) {
             System.out.println("Sorted Movies:");
             for (Movie movie : sortedMovies) {
-                System.out.println(movie.getMovieTitle() + " (" + movie.getReleaseYear() + ") - Rating: " + movie.getRating());
+                System.out.println(movie.getMovieID() + ". " + movie.getMovieTitle() +
+                        " (" + movie.getReleaseYear() + ") - " + movie.getGenre() +
+                        " | Rating: " + movie.getRating() + " | Description: "+ movie.getDescription());
             }
         }
     }
@@ -150,9 +156,9 @@ public class Main {
             return;
         }
 
-        System.out.println("Filter by: 1. Genre  2. Minimum Rating  3. Release Year Range");
+        System.out.println("Filter by: 1. Genre  2. Minimum Rating  3. Release Year Range   4. Maximum Rating");
         int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine();  
 
         List<Movie> filteredMovies = null;
 
@@ -174,6 +180,11 @@ public class Main {
                 int endYear = scanner.nextInt();
                 filteredMovies = movieLists.get(listName).filterByReleaseYearRange(startYear, endYear);
             }
+            case 4 -> {
+                System.out.print("Enter Max Rating: ");
+                double maxRating = scanner.nextDouble();
+                filteredMovies = movieLists.get(listName).filterByMaxRating(maxRating);
+            }
             default -> System.out.println("Invalid choice. Returning to menu.");
         }
 
@@ -182,7 +193,9 @@ public class Main {
                 System.out.println("No movies found.");
             } else {
                 for (Movie movie : filteredMovies) {
-                    System.out.println(movie.getMovieTitle() + " (" + movie.getReleaseYear() + ") - Rating: " + movie.getRating());
+                    System.out.println(movie.getMovieID() + ". " + movie.getMovieTitle() +
+                        " (" + movie.getReleaseYear() + ") - " + movie.getGenre() +
+                        " | Rating: " + movie.getRating() + " | Description: "+ movie.getDescription());
                 }
             }
         }

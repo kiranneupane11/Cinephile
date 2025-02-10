@@ -39,8 +39,8 @@ public class MovieList {
         movies.add(movie);
     }
 
-    public void removeMovie(Movie movie) {
-        movies.remove(movie);
+    public void removeMovieByTitle(String title) {
+        movies.removeIf(movie -> movie.getMovieTitle() == title);
     }
 
     public void removeMovieById(int movieID) {
@@ -68,7 +68,7 @@ public class MovieList {
                 .collect(Collectors.toList());
     }
 
-    public List<Movie> sortByRatingDescending() {
+    public List<Movie> sortByRatingDescending(){
         return movies.stream()
                 .sorted(Comparator.comparingDouble(Movie::getRating).reversed())
                 .collect(Collectors.toList());
@@ -84,6 +84,12 @@ public class MovieList {
     public List<Movie> filterByMinimumRating(double minRating) {
         return movies.stream()
                 .filter(movie -> movie.getRating() >= minRating)
+                .collect(Collectors.toList());
+    }
+    
+    public List<Movie> filterByMaxRating(double maxRating){
+        return movies.stream()
+                .filter(movie -> movie.getRating() >= maxRating)
                 .collect(Collectors.toList());
     }
 
