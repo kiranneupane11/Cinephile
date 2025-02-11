@@ -4,6 +4,7 @@
  */
 package com.mycompany.mymovielist;
 
+import com.mycompany.mymovielist.model.Movie;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

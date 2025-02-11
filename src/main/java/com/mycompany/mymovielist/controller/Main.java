@@ -1,5 +1,7 @@
-package com.mycompany.mymovielist;
+package com.mycompany.mymovielist.controller;
 
+import com.mycompany.mymovielist.model.Movie;
+import com.mycompany.mymovielist.model.MovieList;
 import java.util.*;
 
 public class Main {

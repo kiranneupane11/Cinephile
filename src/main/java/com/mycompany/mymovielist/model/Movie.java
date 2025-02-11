@@ -1,4 +1,4 @@
-package com.mycompany.mymovielist;
+package com.mycompany.mymovielist.model;
 
 import java.time.Year; 
 
@@ -14,7 +14,7 @@ public class Movie {
     private double rating;
     private String description;
     
-    Movie(int movieID, String title, int releaseYear, String genre, double rating, String description){
+    public Movie(int movieID, String title, int releaseYear, String genre, double rating, String description){
         setMovieID(movieID);
         setMovieTitle(title);
         setReleaseYear(releaseYear);
