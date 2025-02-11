@@ -40,7 +40,7 @@ public class MovieList {
     }
 
     public void removeMovieByTitle(String title) {
-        movies.removeIf(movie -> movie.getMovieTitle() == title);
+        movies.removeIf(movie -> movie.getMovieTitle().equals(title));
     }
 
     public void removeMovieById(int movieID) {

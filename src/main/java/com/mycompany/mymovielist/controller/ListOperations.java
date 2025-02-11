@@ -8,6 +8,6 @@ package com.mycompany.mymovielist.controller;
  *
  * @author kiran
  */
-public class MovieOperations {
+public class ListOperations {
     
 }
