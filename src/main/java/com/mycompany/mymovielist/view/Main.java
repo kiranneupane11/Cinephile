@@ -1,4 +1,4 @@
-package com.mycompany.mymovielist.controller;
+package com.mycompany.mymovielist.view;
 
 import com.mycompany.mymovielist.model.Movie;
 import com.mycompany.mymovielist.model.MovieList;
