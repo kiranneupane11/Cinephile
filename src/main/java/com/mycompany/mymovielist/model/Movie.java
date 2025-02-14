@@ -12,11 +12,13 @@ public class Movie {
     private int releaseYear;
     private String genre;
     private String description;
+    private double rating;
     
-    public Movie(int movieID, String title, int releaseYear, String genre, String description){
+    public Movie(int movieID, String title, int releaseYear, String genre, double rating, String description){
         setMovieID(movieID);
         setMovieTitle(title);
         setReleaseYear(releaseYear);
+        setRating(rating);
         this.genre = genre;
         this.description = description;
     }
@@ -30,6 +32,17 @@ public class Movie {
         throw new IllegalArgumentException("Movie ID must be greater than zero.");
     }
         this.movieID = movieID;
+    }
+    
+    public double getRating(){
+        return rating;
+    }
+    
+    public void setRating(double rating){
+        if(rating < 1 || rating > 10){
+            throw new IllegalArgumentException("Rating must be between 1 and 10");
+        }
+        this.rating = Math.round(rating * 10) / 10.0 ;
     }
     
     

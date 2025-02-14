@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  */
 public class MovieList {
     private String listName;
-    private List<Movie> movies;
+    private List<UserMovie> movies;
 
     public MovieList(String listName) {
         this.listName = listName;
@@ -28,11 +28,11 @@ public class MovieList {
         this.listName = listName;
     }
 
-    public List<Movie> getMovies() {
+    public List<UserMovie> getMovies() {
         return new ArrayList<>(movies);
     }
 
-    public void addMovie(Movie movie) {
+    public void addMovie(UserMovie movie) {
         if (movie == null) {
             throw new IllegalArgumentException("Movie cannot be null");
         }
@@ -40,14 +40,14 @@ public class MovieList {
     }
 
     public void removeMovieByTitle(String title) {
-        movies.removeIf(movie -> movie.getMovieTitle().equals(title));
+        movies.removeIf(userMovie -> userMovie.getMovie().getMovieTitle().equals(title));
     }
 
     public void removeMovieById(int movieID) {
-        movies.removeIf(movie -> movie.getMovieID() == movieID);
+        movies.removeIf(userMovie -> userMovie.getMovie().getMovieID() == movieID);
     }
 
-    public boolean containsMovie(Movie movie) {
+    public boolean containsMovie(UserMovie movie) {
         return movies.contains(movie);
     }
 

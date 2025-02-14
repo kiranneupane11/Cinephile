@@ -8,9 +8,10 @@ package com.mycompany.mymovielist.model;
  *
  * @author kiran
  */
-public class UserMovie extends Movie{
+public class UserMovie{
     private Status status;
     private double rating;
+    private Movie movie;
     
     public enum Status {
         WATCHED,
@@ -21,11 +22,16 @@ public class UserMovie extends Movie{
     
     public UserMovie(Movie movie, double rating, Status staus){
         
-        super(movie.getMovieID(), movie.getMovieTitle(), movie.getReleaseYear(), movie.getGenre(), movie.getDescription());
+        this.movie = movie;
         setStatus(status);
         setRating(rating);
     }
     
+    public Movie getMovie(){
+        return movie;
+    }
+            
+            
     public double getRating(){
         return rating;
     }

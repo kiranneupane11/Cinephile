@@ -43,7 +43,8 @@ public class Admin extends User{
     public void viewAllUsers(GenericRepository<User> userRepo) {
         System.out.println("\nRegistered Users:");
         for (User user : userRepo.getAll()) {
-            user.getUsername();
+            System.out.println("- " + user.getUsername());
+            
         }
     }
 }

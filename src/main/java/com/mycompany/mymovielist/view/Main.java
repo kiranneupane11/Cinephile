@@ -2,7 +2,6 @@ package com.mycompany.mymovielist.view;
 
 import com.mycompany.mymovielist.model.*;
 import com.mycompany.mymovielist.repository.GenericRepository;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -35,9 +34,9 @@ public class Main {
     }
     
     private static void seedMovieRepository() {
-        movieRepository.add(new Movie(1, "Inception", 2010, "Sci-Fi", "A mind-bending thriller"));
-        movieRepository.add(new Movie(2, "The Dark Knight", 2008, "Action", "Batman vs Joker"));
-        movieRepository.add(new Movie(3, "Interstellar", 2014, "Sci-Fi", "Exploring the cosmos"));
+        movieRepository.add(new Movie(1, "Inception", 2010, "Sci-Fi",8.8, "A mind-bending thriller"));
+        movieRepository.add(new Movie(2, "The Dark Knight", 2008, "Action",9.3, "Batman vs Joker"));
+        movieRepository.add(new Movie(3, "Interstellar", 2014, "Sci-Fi",7.7, "Exploring the cosmos"));
     }
     
     private static void adminPanel(Admin admin) {
@@ -45,7 +44,8 @@ public class Main {
             System.out.println("\nAdmin Panel");
             System.out.println("1. Add Movie");
             System.out.println("2. View All Movies");
-            System.out.println("3. Logout");
+            System.out.println("3. View All Users");
+            System.out.println("4. Logout");
             System.out.print("Choose an option: ");
             
             int choice = scanner.nextInt();
@@ -62,17 +62,24 @@ public class Main {
                     String genre = scanner.nextLine();
                     System.out.print("Enter description: ");
                     String description = scanner.nextLine();
-                    Movie movie = new Movie(movieRepository.getAll().size() + 1, title, releaseYear, genre, description);
+                    System.out.print("Enter movie rating (1-10): ");
+                    double rating = scanner.nextDouble();
+                    scanner.nextLine();
+                    Movie movie = new Movie(movieRepository.getAll().size() + 1, title, releaseYear,genre, rating, description);
                     admin.addMedia(movieRepository, movie);
                 }
                 case 2 -> {
                     System.out.println("\nMovies in Repository:");
                     for (Movie movie : movieRepository.getAll()) {
                         System.out.println(movie.getMovieID() + ". " + movie.getMovieTitle() +
-                        " (" + movie.getReleaseYear() + ") - " + movie.getGenre() + " | Description: "+ movie.getDescription());
+                        " (" + movie.getReleaseYear() + ") - " + movie.getGenre() + "| Rating:" + movie.getRating() +
+                        " | Description: "+ movie.getDescription());
                     }
                 }
-                case 3 -> { return; }
+                case 3 -> {
+                    admin.viewAllUsers(userRepository);
+                }
+                case 4 -> { return; }
                 default -> System.out.println("Invalid option. Try again.");
             }
         }
@@ -100,6 +107,7 @@ public class Main {
                     System.out.print("Enter list name: ");
                     String listName = scanner.nextLine();
                     user.createList(listName);
+                    userRepository.add(user);
                 }
                 case 2 -> {
                     user.viewAllLists();
