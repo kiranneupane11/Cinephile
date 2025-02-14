@@ -11,24 +11,14 @@ public class Movie {
     private String title;
     private int releaseYear;
     private String genre;
-    private double rating;
     private String description;
-    private Status status;
     
-    public enum Status {
-        WATCHED,
-        WATCHING,
-        PLAN_TO_WATCH
-    }
-    
-    public Movie(int movieID, String title, int releaseYear, String genre, double rating, String description, Status status){
+    public Movie(int movieID, String title, int releaseYear, String genre, String description){
         setMovieID(movieID);
         setMovieTitle(title);
         setReleaseYear(releaseYear);
         this.genre = genre;
-        setRating(rating);
         this.description = description;
-        setStatus(status);
     }
     
     public int getMovieID(){
@@ -42,16 +32,6 @@ public class Movie {
         this.movieID = movieID;
     }
     
-    public double getRating(){
-        return rating;
-    }
-    
-    public void setRating(double rating){
-        if(rating < 1 || rating > 10){
-            throw new IllegalArgumentException("Rating must be between 1 and 10");
-        }
-        this.rating = Math.round(rating * 10) / 10.0 ;
-    }
     
     public String getMovieTitle() {
         return title;
@@ -92,16 +72,6 @@ public class Movie {
         return description;
     }
     
-    public void setStatus(Status status) {
-        if (status == null) {
-            throw new IllegalArgumentException("Status cannot be null.");
-        }
-        this.status = status;
-    }
-    
-    public Status getStatus() {
-        return status;
-    }
 }
 
 
