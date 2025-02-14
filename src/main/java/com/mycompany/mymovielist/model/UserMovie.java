@@ -4,8 +4,6 @@
  */
 package com.mycompany.mymovielist.model;
 
-import com.mycompany.mymovielist.model.Movie;
-
 /**
  *
  * @author kiran

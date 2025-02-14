@@ -18,6 +18,7 @@ public class User {
     public User(String username) {
         this.username = username;
         this.userID = userID;
+        this.movieLists = new HashMap<>();
     }
     
     public String getUsername() {
@@ -51,12 +52,17 @@ public class User {
 
     // ✅ Get a specific list of movies
     
-    public List<Movie> getList(String listName) {
+    public void viewThisList(String listName) {
+        
         if (!movieLists.containsKey(listName)) {
             System.out.println("List '" + listName + "' does not exist.");
-            return null;
         }
-        return movieLists.get(listName).getMovies();
+        
+        List<Movie> movies = movieLists.get(listName).getMovies();
+       
+        for (Movie movie : movies) {
+            System.out.println("- " + movie.getMovieTitle());
+        }   
     }
 
     // ✅ View all lists owned by the user
@@ -74,16 +80,16 @@ public class User {
 
     // ✅ View a specific list from another user
     
-    public void viewUserList(User user, String listName) {
-        List<Movie> movies = user.getList(listName);
-        if (movies == null || movies.isEmpty()) {
-            System.out.println(user.getUsername() + "'s list '" + listName + "' is empty or does not exist.");
-            return;
-        }
-        System.out.println("\n" + user.getUsername() + "'s Movie List: " + listName);
-        for (Movie movie : movies) {
-            movie.getMovieTitle();
-        }
-    }
+//    public void viewOtherUsersList(User user, String listName) {
+//        List<Movie> movies = user.getList(listName);
+//        if (movies == null || movies.isEmpty()) {
+//            System.out.println(user.getUsername() + "'s list '" + listName + "' is empty or does not exist.");
+//            return;
+//        }
+//        System.out.println("\n" + user.getUsername() + "'s Movie List: " + listName);
+//        for (Movie movie : movies) {
+//            movie.getMovieTitle();
+//        }
+//    }
 }
 

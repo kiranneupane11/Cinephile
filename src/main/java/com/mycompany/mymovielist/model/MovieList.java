@@ -56,48 +56,48 @@ public class MovieList {
     }
 
     // Sorting methods
-    public List<Movie> sortByTitle() {
-        return movies.stream()
-                .sorted(Comparator.comparing(Movie::getMovieTitle))
-                .collect(Collectors.toList());
-    }
-
-    public List<Movie> sortByReleaseYear() {
-        return movies.stream()
-                .sorted(Comparator.comparingInt(Movie::getReleaseYear))
-                .collect(Collectors.toList());
-    }
-
-    public List<Movie> sortByRatingDescending(){
-        return movies.stream()
-                .sorted(Comparator.comparingDouble(Movie::getRating).reversed())
-                .collect(Collectors.toList());
-    }
-
-    // Filtering methods
-    public List<Movie> filterByGenre(String genre) {
-        return movies.stream()
-                .filter(movie -> movie.getGenre().equalsIgnoreCase(genre))
-                .collect(Collectors.toList());
-    }
-
-    public List<Movie> filterByMinimumRating(double minRating) {
-        return movies.stream()
-                .filter(movie -> movie.getRating() >= minRating)
-                .collect(Collectors.toList());
-    }
-    
-    public List<Movie> filterByMaxRating(double maxRating){
-        return movies.stream()
-                .filter(movie -> movie.getRating() >= maxRating)
-                .collect(Collectors.toList());
-    }
-
-    public List<Movie> filterByReleaseYearRange(int startYear, int endYear) {
-        return movies.stream()
-                .filter(movie -> movie.getReleaseYear() >= startYear && movie.getReleaseYear() <= endYear)
-                .collect(Collectors.toList());
-    }
+//    public List<Movie> sortByTitle() {
+//        return movies.stream()
+//                .sorted(Comparator.comparing(Movie::getMovieTitle))
+//                .collect(Collectors.toList());
+//    }
+//
+//    public List<Movie> sortByReleaseYear() {
+//        return movies.stream()
+//                .sorted(Comparator.comparingInt(Movie::getReleaseYear))
+//                .collect(Collectors.toList());
+//    }
+//
+//    public List<Movie> sortByRatingDescending(){
+//        return movies.stream()
+//                .sorted(Comparator.comparingDouble(Movie::getRating).reversed())
+//                .collect(Collectors.toList());
+//    }
+//
+//    // Filtering methods
+//    public List<Movie> filterByGenre(String genre) {
+//        return movies.stream()
+//                .filter(movie -> movie.getGenre().equalsIgnoreCase(genre))
+//                .collect(Collectors.toList());
+//    }
+//
+//    public List<Movie> filterByMinimumRating(double minRating) {
+//        return movies.stream()
+//                .filter(movie -> movie.getRating() >= minRating)
+//                .collect(Collectors.toList());
+//    }
+//    
+//    public List<Movie> filterByMaxRating(double maxRating){
+//        return movies.stream()
+//                .filter(movie -> movie.getRating() >= maxRating)
+//                .collect(Collectors.toList());
+//    }
+//
+//    public List<Movie> filterByReleaseYearRange(int startYear, int endYear) {
+//        return movies.stream()
+//                .filter(movie -> movie.getReleaseYear() >= startYear && movie.getReleaseYear() <= endYear)
+//                .collect(Collectors.toList());
+//    }
 
     @Override
     public String toString() {

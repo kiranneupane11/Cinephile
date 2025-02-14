@@ -1,204 +1,130 @@
 package com.mycompany.mymovielist.view;
 
-import com.mycompany.mymovielist.model.Movie;
-import com.mycompany.mymovielist.model.MovieList;
-import java.util.*;
+import com.mycompany.mymovielist.model.*;
+import com.mycompany.mymovielist.repository.GenericRepository;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
-    private static final Map<String, MovieList> movieLists = new HashMap<>();
-
+    private static final GenericRepository<User> userRepository = new GenericRepository<>();
+    private static final GenericRepository<Movie> movieRepository = new GenericRepository<>();
+    
     public static void main(String[] args) {
+        Admin admin = new Admin("Admin");
+        userRepository.add(admin);
+        seedMovieRepository();
+        
         while (true) {
-            System.out.println("\n=== Movie List Manager ===");
-            System.out.println("1. Add Movie");
-            System.out.println("2. Remove Movie by ID");
-            System.out.println("3. View Movies in a List");
-            System.out.println("4. Sort Movies");
-            System.out.println("5. Filter Movies");
-            System.out.println("6. Exit");
+            System.out.println("\nWelcome to My Movie List");
+            System.out.println("1. Admin Panel");
+            System.out.println("2. User Panel");
+            System.out.println("3. Exit");
             System.out.print("Choose an option: ");
-
+            
             int choice = scanner.nextInt();
-            scanner.nextLine();  
-
+            scanner.nextLine();
+            
             switch (choice) {
-                case 1 -> addMovie();
-                case 2 -> removeMovie();
-                case 3 -> viewMovies();
-                case 4 -> sortMovies();
-                case 5 -> filterMovies();
-                case 6 -> {
-                    System.out.println("Exiting...");
-                    return;
+                case 1 -> adminPanel(admin);
+                case 2 -> userPanel();
+                case 3 -> System.exit(0);
+                default -> System.out.println("Invalid option. Try again.");
+            }
+        }
+    }
+    
+    private static void seedMovieRepository() {
+        movieRepository.add(new Movie(1, "Inception", 2010, "Sci-Fi", "A mind-bending thriller"));
+        movieRepository.add(new Movie(2, "The Dark Knight", 2008, "Action", "Batman vs Joker"));
+        movieRepository.add(new Movie(3, "Interstellar", 2014, "Sci-Fi", "Exploring the cosmos"));
+    }
+    
+    private static void adminPanel(Admin admin) {
+        while (true) {
+            System.out.println("\nAdmin Panel");
+            System.out.println("1. Add Movie");
+            System.out.println("2. View All Movies");
+            System.out.println("3. Logout");
+            System.out.print("Choose an option: ");
+            
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            
+            switch (choice) {
+                case 1 -> {
+                    System.out.print("Enter movie title: ");
+                    String title = scanner.nextLine();
+                    System.out.print("Enter release year: ");
+                    int releaseYear = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("Enter genre: ");
+                    String genre = scanner.nextLine();
+                    System.out.print("Enter description: ");
+                    String description = scanner.nextLine();
+                    Movie movie = new Movie(movieRepository.getAll().size() + 1, title, releaseYear, genre, description);
+                    admin.addMedia(movieRepository, movie);
                 }
-                default -> System.out.println("Invalid choice. Try again.");
-            }
-        }
-    }
-
-    private static void addMovie() {
-        System.out.print("Enter List Name: ");
-        String listName = scanner.nextLine();
-
-        // Fetch or create the list
-        MovieList movieList = movieLists.computeIfAbsent(listName, MovieList::new);
-
-        System.out.print("Enter Movie ID: ");
-        int movieID = scanner.nextInt();
-        scanner.nextLine(); 
-
-        System.out.print("Enter Movie Title: ");
-        String title = scanner.nextLine();
-
-        System.out.print("Enter Release Year: ");
-        int releaseYear = scanner.nextInt();
-        scanner.nextLine(); 
-
-        System.out.print("Enter Genre: ");
-        String genre = scanner.nextLine();
-
-        System.out.print("Enter Rating (1-10): ");
-        double rating = scanner.nextDouble();
-        scanner.nextLine(); 
-
-        System.out.print("Enter Description: ");
-        String description = scanner.nextLine();
-
-        try {
-            Movie movie = new Movie(movieID, title, releaseYear, genre, rating, description);
-            movieList.addMovie(movie);
-            System.out.println("Movie added successfully to list: " + listName);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-    }
-
-    private static void removeMovie() {
-        System.out.print("Enter List Name: ");
-        String listName = scanner.nextLine();
-
-        if (!movieLists.containsKey(listName)) {
-            System.out.println("List does not exist.");
-            return;
-        }
-
-        System.out.print("Enter Movie ID to remove: ");
-        int movieID = scanner.nextInt();
-        scanner.nextLine(); 
-
-        movieLists.get(listName).removeMovieById(movieID);
-        System.out.println("Movie removed if it existed in list: " + listName);
-    }
-
-    private static void viewMovies() {
-        System.out.print("Enter List Name: ");
-        String listName = scanner.nextLine();
-
-        if (!movieLists.containsKey(listName)) {
-            System.out.println("List does not exist.");
-            return;
-        }
-
-        List<Movie> movies = movieLists.get(listName).getMovies();
-        if (movies.isEmpty()) {
-            System.out.println("No movies in the list.");
-        } else {
-            for (Movie movie : movies) {
-                System.out.println(movie.getMovieID() + ". " + movie.getMovieTitle() +
-                        " (" + movie.getReleaseYear() + ") - " + movie.getGenre() +
-                        " | Rating: " + movie.getRating() + " | Description: "+ movie.getDescription());
-            }
-        }
-    }
-
-    private static void sortMovies() {
-        System.out.print("Enter List Name: ");
-        String listName = scanner.nextLine();
-
-        if (!movieLists.containsKey(listName)) {
-            System.out.println("List does not exist.");
-            return;
-        }
-
-        System.out.println("Sort by: 1. Title  2. Release Year  3. Rating");
-        while (!scanner.hasNextInt()) {
-        System.out.println("Invalid input. Please enter a number.");
-        scanner.next(); // Consume invalid input
-        }
-        int choice = scanner.nextInt();
-        scanner.nextLine();  
-
-        List<Movie> sortedMovies = switch (choice) {
-            case 1 -> movieLists.get(listName).sortByTitle();
-            case 2 -> movieLists.get(listName).sortByReleaseYear();
-            case 3 -> movieLists.get(listName).sortByRatingDescending();
-            default -> {
-                System.out.println("Invalid choice. Returning to menu.");
-                yield null;
-            }
-        };
-
-        if (sortedMovies != null) {
-            System.out.println("Sorted Movies:");
-            for (Movie movie : sortedMovies) {
-                System.out.println(movie.getMovieID() + ". " + movie.getMovieTitle() +
-                        " (" + movie.getReleaseYear() + ") - " + movie.getGenre() +
-                        " | Rating: " + movie.getRating() + " | Description: "+ movie.getDescription());
-            }
-        }
-    }
-
-    private static void filterMovies() {
-        System.out.print("Enter List Name: ");
-        String listName = scanner.nextLine();
-
-        if (!movieLists.containsKey(listName)) {
-            System.out.println("List does not exist.");
-            return;
-        }
-
-        System.out.println("Filter by: 1. Genre  2. Minimum Rating  3. Release Year Range   4. Maximum Rating");
-        int choice = scanner.nextInt();
-        scanner.nextLine();  
-
-        List<Movie> filteredMovies = null;
-
-        switch (choice) {
-            case 1 -> {
-                System.out.print("Enter Genre: ");
-                String genre = scanner.nextLine();
-                filteredMovies = movieLists.get(listName).filterByGenre(genre);
-            }
-            case 2 -> {
-                System.out.print("Enter Minimum Rating: ");
-                double minRating = scanner.nextDouble();
-                filteredMovies = movieLists.get(listName).filterByMinimumRating(minRating);
-            }
-            case 3 -> {
-                System.out.print("Enter Start Year: ");
-                int startYear = scanner.nextInt();
-                System.out.print("Enter End Year: ");
-                int endYear = scanner.nextInt();
-                filteredMovies = movieLists.get(listName).filterByReleaseYearRange(startYear, endYear);
-            }
-            case 4 -> {
-                System.out.print("Enter Max Rating: ");
-                double maxRating = scanner.nextDouble();
-                filteredMovies = movieLists.get(listName).filterByMaxRating(maxRating);
-            }
-            default -> System.out.println("Invalid choice. Returning to menu.");
-        }
-
-        if (filteredMovies != null) {
-            if (filteredMovies.isEmpty()) {
-                System.out.println("No movies found.");
-            } else {
-                for (Movie movie : filteredMovies) {
-                    System.out.println(movie.getMovieID() + ". " + movie.getMovieTitle() +
-                        " (" + movie.getReleaseYear() + ") - " + movie.getGenre() +
-                        " | Rating: " + movie.getRating() + " | Description: "+ movie.getDescription());
+                case 2 -> {
+                    System.out.println("\nMovies in Repository:");
+                    for (Movie movie : movieRepository.getAll()) {
+                        System.out.println(movie.getMovieID() + ". " + movie.getMovieTitle() +
+                        " (" + movie.getReleaseYear() + ") - " + movie.getGenre() + " | Description: "+ movie.getDescription());
+                    }
                 }
+                case 3 -> { return; }
+                default -> System.out.println("Invalid option. Try again.");
+            }
+        }
+    }
+    
+    private static void userPanel() {
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+        User user = new User(username);
+        userRepository.add(user);
+        
+        while (true) {
+            System.out.println("\nUser Menu - " + user.getUsername());
+            System.out.println("1. Create Movie List");
+            System.out.println("2. View My Movie Lists");
+            System.out.println("3. Add Movie to List");
+            System.out.println("4. Logout");
+            System.out.print("Choose an option: ");
+            
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            
+            switch (choice) {
+                case 1 -> {
+                    System.out.print("Enter list name: ");
+                    String listName = scanner.nextLine();
+                    user.createList(listName);
+                }
+                case 2 -> {
+                    user.viewAllLists();
+                    System.out.print("Enter list name: ");
+                    String listName = scanner.nextLine();
+                    user.viewThisList(listName);
+                }
+                case 3 -> {
+                    System.out.print("Enter list name: ");
+                    String listName = scanner.nextLine();
+                    System.out.println("Available Movies:");
+                    for (Movie movie : movieRepository.getAll()) {
+                        System.out.println("- " + movie.getMovieTitle());
+                    }
+                    System.out.print("Enter movie title to add: ");
+                    String movieTitle = scanner.nextLine();
+                    for (Movie movie : movieRepository.getAll()) {
+                        if (movie.getMovieTitle().equalsIgnoreCase(movieTitle)) {
+                            user.addToList(listName, movie);
+                            break;
+                        }
+                    }
+                }
+                case 4 -> { return; }
+                default -> System.out.println("Invalid option. Try again.");
             }
         }
     }
