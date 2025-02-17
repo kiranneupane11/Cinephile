@@ -14,10 +14,10 @@ public class UserMovie{
     private Movie movie;
     
     public enum Status {
-        WATCHED,
-        WATCHING,
-        PLAN_TO_WATCH,
-        DROPPED
+        Watched,
+        Watching,
+        Plan_To_Watch,
+        Dropped
     }
     
     public UserMovie(Movie movie, double rating, Status staus){

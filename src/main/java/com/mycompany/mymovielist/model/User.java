@@ -51,14 +51,23 @@ public class User {
     System.out.print("Enter your rating (1-10) for '" + movie.getMovieTitle() + "': ");
     double rating = scanner.nextDouble();
     scanner.nextLine();  
+    
+    int statusChoice;
 
-    System.out.print("Enter movie status ('Watched', 'Plan to Watch', 'Watching', 'Dropped'): ");
-    String statusInput = scanner.nextLine().trim();
+    System.out.print("Enter movie status ('1.Watched', '2.Plan to Watch', '3.Watching', '4.Dropped'): ");
+    statusChoice = Integer.parseInt(scanner.nextLine().trim());
 
-    UserMovie userMovie = null; 
+    UserMovie userMovie = null;
+
 
     try {
-        Status status = Status.valueOf(statusInput);
+        Status status = switch (statusChoice) {
+            case 1 -> Status.Watched;
+            case 2 -> Status.Plan_To_Watch;
+            case 3 -> Status.Watching;
+            case 4 -> Status.Dropped;
+            default -> throw new IllegalArgumentException("Invalid status selection");
+    };
         userMovie = new UserMovie(movie, rating, status);
         movieLists.get(listName).addMovie(userMovie);
         System.out.println("Added '" + userMovie.getMovie().getMovieTitle() + "' to " + listName);
