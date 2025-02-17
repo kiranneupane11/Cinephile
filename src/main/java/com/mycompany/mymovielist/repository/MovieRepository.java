@@ -4,10 +4,15 @@
  */
 package com.mycompany.mymovielist.repository;
 
+import com.mycompany.mymovielist.model.Movie;
+import java.util.*;
+
+
 /**
  *
  * @author kiran
  */
-public class MovieRepository {
+public class MovieRepository extends AbstractRepository<Movie, String>{
+    
     
 }
