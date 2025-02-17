@@ -20,7 +20,7 @@ public class UserMovie{
         Dropped
     }
     
-    public UserMovie(Movie movie, double rating, Status staus){
+    public UserMovie(Movie movie, double rating, Status status){
         
         this.movie = movie;
         setStatus(status);
@@ -53,4 +53,12 @@ public class UserMovie{
     public Status getStatus() {
         return status;
     }
+    @Override
+    public String toString() {
+    return "UserMovie{" +
+           "movie=" + movie.getMovieTitle() +
+           ", rating=" + rating +
+           ", status=" + status +
+           '}';
+}
 }

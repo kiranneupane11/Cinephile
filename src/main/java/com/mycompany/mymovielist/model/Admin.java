@@ -4,47 +4,38 @@
  */
 package com.mycompany.mymovielist.model;
 
-import com.mycompany.mymovielist.repository.GenericRepository;
+import com.mycompany.mymovielist.repository.*;
+import java.util.*;
+
 /**
  *
  * @author kiran
  */
-public class Admin extends User{
-      public Admin(String username) {
-        super(username);
-    }
-      public <T> void addMedia(GenericRepository<T> repository, T item){
-          repository.add(item);
-          System.out.println("Admin added: " + ((Movie) item).getMovieTitle());
-          
-    }
-      public <T> void removeMedia(GenericRepository<T> repository, T item) {
-        repository.remove(item);
-        System.out.println("Admin removed: " + ((Movie) item).getMovieTitle());
+public class Admin extends User {
+    private final MovieRepository movieRepository;
+
+    public Admin(int userID, String username, MovieRepository movieRepository) {
+        super(userID, username); // Call the User constructor
+        this.movieRepository = movieRepository;
     }
 
-    public <T> void updateMedia(GenericRepository<T> repository, T oldItem, T newItem) {
-        repository.remove(oldItem);
-        repository.add(newItem);
-        System.out.println("Admin updated: " + ((Movie) newItem).getMovieTitle());
-    }
-    
-    public void addUser(GenericRepository<User> userRepo, User user) {
-        userRepo.add(user);
-        System.out.println("Admin added user: " + user.getUsername() + " (UserID: " + user.getUserID() + ")");
+    public void addMovie(int id, String title, int year, String genre, double rating, String description) {
+        Movie movie = new Movie(id, title, year, genre, rating, description);
+        movieRepository.add(id, movie);
+        System.out.println("Movie added: " + title);
     }
 
-    public void removeUser(GenericRepository<User> userRepo, User user) {
-        userRepo.remove(user);
-        System.out.println("Admin removed user: " + user.getUsername() + " (UserID: " + user.getUserID() + ")");
+    public void removeMovie(int id) {
+        movieRepository.remove(id);
+        System.out.println("Movie removed with ID: " + id);
     }
 
-    // Admin can view all users
-    public void viewAllUsers(GenericRepository<User> userRepo) {
-        System.out.println("\nRegistered Users:");
-        for (User user : userRepo.getAll()) {
-            System.out.println("- " + user.getUsername());
-            
-        }
+    public Optional<Movie> getMovie(int id) {
+        return movieRepository.get(id);
+    }
+
+    public List<Movie> getAllMovies() {
+        return movieRepository.getAll();
     }
 }
+
