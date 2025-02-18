@@ -9,9 +9,9 @@ import com.mycompany.mymovielist.model.*;
  *
  * @author kiran
  */
-public class UserMovieRepository extends AbstractRepository<UserMovie, String> {
+public class UserMovieRepository extends AbstractRepository<UserMovie, Integer> {
     
-    public void updateRating(String movieId, double newRating) {
+    public void updateRating(int movieId, double newRating) {
         UserMovie userMovie = items.get(movieId);
         if (userMovie != null) {
             userMovie.setRating(newRating);
@@ -20,7 +20,7 @@ public class UserMovieRepository extends AbstractRepository<UserMovie, String> {
         }
     }
     
-    public void updateStatus(String movieId, UserMovie.Status newStatus) {
+    public void updateStatus(int movieId, UserMovie.Status newStatus) {
         UserMovie userMovie = items.get(movieId);
         if (userMovie != null) {
             userMovie.setStatus(newStatus);

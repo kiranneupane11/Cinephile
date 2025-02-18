@@ -4,8 +4,6 @@
  */
 package com.mycompany.mymovielist.model;
 
-import com.mycompany.mymovielist.model.UserMovie.Status;
-
 import java.util.*;
 
 /**
@@ -32,7 +30,15 @@ public class User {
     }
 
     public Map<String, MovieList> getMovieLists() {
-        return movieLists;
+        return Collections.unmodifiableMap(movieLists);
+    }
+    
+    public boolean createMovieList(String listName) {
+        if (movieLists.containsKey(listName)) {
+            return false; 
+        }
+        movieLists.put(listName, new MovieList(listName));
+        return true;
     }
 
     public void addMovieList(MovieList movieList) {
