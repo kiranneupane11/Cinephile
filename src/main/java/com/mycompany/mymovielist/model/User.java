@@ -5,20 +5,33 @@
 package com.mycompany.mymovielist.model;
 
 import java.util.*;
+import jakarta.persistence.*;
+
 
 /**
  *
  * @author kiran
  */
-public class User {
-    protected String username;
-    private final int userID;
-    private final Map<String, MovieList> movieLists;
 
+@Entity
+@Table(name = "users")   
+public class User {
+    
+    @Id
+    private int userID;
+    
+    @Column(unique = true, nullable = false)
+    protected String username;
+    
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @MapKey(name = "listName")
+    private Map<String, MovieList> movieLists = new HashMap<>();
+
+    public User() {} // Required for JPA
+    
     public User(int userID, String username) {
         this.username = username;
-        this.userID = new Random().nextInt(1000); // Assign random user ID
-        this.movieLists = new HashMap<>();
+        this.userID = userID; 
     }
 
     public String getUsername() {

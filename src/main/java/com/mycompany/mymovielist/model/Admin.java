@@ -7,6 +7,7 @@ package com.mycompany.mymovielist.model;
 import com.mycompany.mymovielist.repository.*;
 import java.util.*;
 
+
 /**
  *
  * @author kiran

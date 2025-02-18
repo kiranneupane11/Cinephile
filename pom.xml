@@ -35,14 +35,17 @@
             <scope>test</scope>
         </dependency>
 
-<!--         JUnit 5 Engine (required to run tests) 
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.10.0</version>
-            <scope>test</scope>
-        </dependency>        -->
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.2.0</version>
+        </dependency>
         
+            <dependency>
+        <groupId>org.hibernate.orm</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>6.6.8.Final</version>
+            </dependency>        
         
     </dependencies>
 </project>

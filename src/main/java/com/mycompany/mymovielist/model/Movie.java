@@ -1,18 +1,39 @@
 package com.mycompany.mymovielist.model;
 
 import java.time.Year; 
+import jakarta.persistence.*;
 
 /**
  *
  * @author kiran
  */
+
+@Entity
+@Table(name = "movies")
 public class Movie {
+    
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int movieID;
+
+    @Column(nullable = false, length = 75)
     private String title;
+
+    @Column(nullable = false)
     private int releaseYear;
+
+    @Column(nullable = false)
     private String genre;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Column(nullable = false)
     private double rating;
+
+    public Movie() {
+    }
     
     public Movie(int movieID, String title, int releaseYear, String genre, double rating, String description){
         setMovieID(movieID);

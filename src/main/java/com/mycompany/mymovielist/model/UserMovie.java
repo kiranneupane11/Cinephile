@@ -4,20 +4,43 @@
  */
 package com.mycompany.mymovielist.model;
 
+import jakarta.persistence.*;
+
 /**
  *
  * @author kiran
  */
+
+@Entity
+@Table(name = "user_movies")
 public class UserMovie{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
+
+    @Column(nullable = false)
     private double rating;
+
+    @ManyToOne
+    @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
+
+    @ManyToOne
+    @JoinColumn(name = "movie_list_id", nullable = false)
+    private MovieList movieList;
     
     public enum Status {
         Watched,
         Watching,
         Plan_To_Watch,
         Dropped
+    }
+    
+    public UserMovie() {
     }
     
     public UserMovie(Movie movie, double rating, Status status){

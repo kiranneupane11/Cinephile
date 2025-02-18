@@ -5,19 +5,33 @@
 package com.mycompany.mymovielist.model;
 import java.util.*;
 import java.util.stream.Collectors;
+import jakarta.persistence.*;
 
 
 /**
  *
  * @author kiran
  */
-public class MovieList {
-    private String listName;
-    private List<UserMovie> movies;
 
+@Entity
+@Table(name = "movie_lists")
+public class MovieList {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "list_name", nullable = false, unique = true)
+    private String listName;
+    
+    @OneToMany(mappedBy = "movieList", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<UserMovie> movies = new ArrayList<>();
+
+    public MovieList() {
+    }
+    
     public MovieList(String listName) {
         this.listName = listName;
-        this.movies = new ArrayList<>();
     }
 
     public String getListName() {
