@@ -16,7 +16,6 @@ public class Main {
         Movie movie = new Movie(1, "Inception", 2010, "Sci-Fi", 8.8, "A mind-bending thriller");
         movieRepository.add(1, movie);
         
-
         // Create user
         User user = new User(1001, "JohnDoe");
         userRepository.add(1001, user);
