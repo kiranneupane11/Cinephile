@@ -4,19 +4,24 @@
  */
 package com.mycompany.mymovielist.model;
 
-import com.mycompany.mymovielist.repository.*;
+import com.mycompany.mymovielist.Database.*;
 import java.util.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 
 
 /**
  *
  * @author kiran
  */
+@Entity
 public class Admin extends User {
-    private final MovieRepository movieRepository;
 
-    public Admin(int userID, String username, MovieRepository movieRepository) {
-        super(userID, username); // Call the User constructor
+    @Transient // Prevents Hibernate from persisting this field
+    private final DBMovieRepository movieRepository;
+
+    public Admin(int userID, String username, DBMovieRepository movieRepository) {
+        super(userID, username);
         this.movieRepository = movieRepository;
     }
 
@@ -39,4 +44,3 @@ public class Admin extends User {
         return movieRepository.getAll();
     }
 }
-

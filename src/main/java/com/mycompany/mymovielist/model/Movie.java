@@ -11,31 +11,31 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "movies")
 public class Movie {
-    
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "movie_id", nullable = false, updatable = false) // ✅ Ensures order
     private int movieID;
 
-    @Column(nullable = false, length = 75)
+    @Column(name = "title", nullable = false, length = 75)
     private String title;
 
-    @Column(nullable = false)
+    @Column(name = "release_year", nullable = false)
     private int releaseYear;
 
-    @Column(nullable = false)
+    @Column(name = "genre", nullable = false, length = 50)
     private String genre;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    @Column(nullable = false)
+    @Column(name = "rating", nullable = false)
     private double rating;
+
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
 
     public Movie() {
     }
-    
-    public Movie(int movieID, String title, int releaseYear, String genre, double rating, String description){
+
+    public Movie(int movieID, String title, int releaseYear, String genre, double rating, String description) {
         setMovieID(movieID);
         setMovieTitle(title);
         setReleaseYear(releaseYear);
@@ -43,6 +43,7 @@ public class Movie {
         this.genre = genre;
         this.description = description;
     }
+
     
     public int getMovieID(){
         return movieID;

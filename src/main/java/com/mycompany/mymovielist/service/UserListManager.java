@@ -6,6 +6,8 @@ package com.mycompany.mymovielist.service;
 
 import com.mycompany.mymovielist.model.*;
 import com.mycompany.mymovielist.repository.*;
+import com.mycompany.mymovielist.Database.*;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -14,9 +16,9 @@ import java.util.stream.Collectors;
  * @author kiran
  */
 public class UserListManager {
-    private final UserRepository userRepository;
+    private final DBUserRepository userRepository;
 
-    public UserListManager(UserRepository userRepository) {
+    public UserListManager(DBUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
