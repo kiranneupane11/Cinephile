@@ -16,13 +16,13 @@ import jakarta.persistence.*;
 public class UserMovie{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private double rating;
 
     @ManyToOne
@@ -43,11 +43,17 @@ public class UserMovie{
     public UserMovie() {
     }
     
-    public UserMovie(Movie movie, double rating, Status status){
+    public UserMovie(Movie movie, MovieList movieList, double rating, Status status){
         
+        this.id = id;
         this.movie = movie;
+        this.movieList = movieList;
         setStatus(status);
         setRating(rating);
+    }
+    
+    public int getId(){
+        return id;
     }
     
     public Movie getMovie(){

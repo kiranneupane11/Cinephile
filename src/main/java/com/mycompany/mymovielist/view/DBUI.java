@@ -14,6 +14,8 @@ public class DBUI {
     private final EntityManager entityManager;
     private final DBUserRepository userRepository;
     private final DBMovieRepository movieRepository;
+    private final DBUserMovieRepository userMovieRepository;
+    private final DBMovieListRepository movieListRepository;
     private final UserListManager userListManager;
 
     public DBUI() {
@@ -22,7 +24,9 @@ public class DBUI {
         this.entityManager = emf.createEntityManager();
         this.userRepository = new DBUserRepository(entityManager);
         this.movieRepository = new DBMovieRepository(entityManager);
+        this.userMovieRepository = new DBUserMovieRepository(entityManager);
         this.userListManager = new UserListManager(userRepository);
+        this.movieListRepository = new DBMovieListRepository(entityManager);
     }
 
     public void start() {
@@ -94,7 +98,13 @@ public class DBUI {
     private void createMovieList(User user) {
         System.out.print("Enter the name of the new movie list: ");
         String listName = scanner.nextLine();
+
         if (user.createMovieList(listName)) {
+            MovieList newList = user.getMovieLists().get(listName);
+
+            // ✅ Persist the new list in the database
+            movieListRepository.add(newList.getListID(), newList);
+
             System.out.println("Movie list '" + listName + "' created successfully!");
         } else {
             System.out.println("A list with this name already exists.");
@@ -144,8 +154,10 @@ public class DBUI {
         double rating = scanner.nextDouble();
         scanner.nextLine();
 
-        UserMovie userMovie = new UserMovie(movie, rating, status);
+        UserMovie userMovie = new UserMovie(movie, movieList, rating, status);
+        userMovieRepository.add(userMovie.getId(), userMovie);
         movieList.addMovie(userMovie);
+        
         System.out.println("Movie added to list successfully!");
     }
 
@@ -186,9 +198,7 @@ public class DBUI {
         System.out.print("Enter description: ");
         String description = scanner.nextLine();
 
-        entityManager.getTransaction().begin();
         admin.addMovie(id, title, year, genre, rating, description);
-        entityManager.getTransaction().commit();
     }
 
     private void removeMovieFromDatabase(Admin admin) {

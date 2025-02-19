@@ -19,7 +19,7 @@ public class MovieList {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int listID;
     
     @Column(name = "list_name", nullable = false, unique = true)
     private String listName;
@@ -30,8 +30,12 @@ public class MovieList {
     public MovieList() {
     }
     
-    public MovieList(String listName) {
+    public MovieList(String listName) { 
         this.listName = listName;
+    }
+    
+    public int getListID(){
+        return listID;
     }
 
     public String getListName() {

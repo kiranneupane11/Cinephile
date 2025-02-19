@@ -3,6 +3,7 @@ package com.mycompany.mymovielist.model;
 import java.time.Year; 
 import jakarta.persistence.*;
 
+
 /**
  *
  * @author kiran
@@ -13,8 +14,7 @@ import jakarta.persistence.*;
 public class Movie {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "movie_id", nullable = false, updatable = false) // ✅ Ensures order
+    @Column(name = "movie_id", nullable = false, updatable = false)
     private int movieID;
 
     @Column(name = "title", nullable = false, length = 75)
