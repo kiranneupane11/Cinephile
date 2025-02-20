@@ -11,7 +11,7 @@ import jakarta.persistence.EntityManager;
  *
  * @author kiran
  */
-public class DBMovieRepository extends DatabaseRepository<Movie, Integer> {
+public class DBMovieRepository extends DatabaseRepository<Movie, Long> {
     public DBMovieRepository(EntityManager entityManager) {
         super(Movie.class, entityManager);
     }

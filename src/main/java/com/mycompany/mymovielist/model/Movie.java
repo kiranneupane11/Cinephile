@@ -14,29 +14,28 @@ import jakarta.persistence.*;
 public class Movie {
 
     @Id
-    @Column(name = "movie_id", nullable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long movieID;
 
-    @Column(name = "title", nullable = false, length = 75)
+    @Column(name = "Title", nullable = false, length = 75)
     private String title;
 
-    @Column(name = "release_year", nullable = false)
+    @Column(name = "Release_Year", nullable = false)
     private Year releaseYear;
 
-    @Column(name = "genre", nullable = false, length = 75)
+    @Column(name = "Genre", nullable = false, length = 75)
     private String genre;
 
-    @Column(name = "rating", nullable = false)
+    @Column(name = "Rating", nullable = false)
     private double rating;
 
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(name = "Description", columnDefinition = "TEXT")
     private String description;
 
     public Movie() {
     }
 
     public Movie(int movieID, String title, Year releaseYear, String genre, double rating, String description) {
-        setMovieID(movieID);
         setMovieTitle(title);
         setReleaseYear(releaseYear);
         setRating(rating);
@@ -48,13 +47,6 @@ public class Movie {
     public long getMovieID(){
         return movieID;
         }
-
-    public void setMovieID(int movieID){
-        if (movieID <= 0) {
-        throw new IllegalArgumentException("Movie ID must be greater than zero.");
-    }
-        this.movieID = movieID;
-    }
     
     public double getRating(){
         return rating;

@@ -4,7 +4,6 @@
  */
 package com.mycompany.mymovielist.model;
 import java.util.*;
-import java.util.stream.Collectors;
 import jakarta.persistence.*;
 
 
@@ -14,18 +13,22 @@ import jakarta.persistence.*;
  */
 
 @Entity
-@Table(name = "movie_lists")
+@Table(name = "List")
 public class MovieList {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int listID;
+    private long listID;
     
-    @Column(name = "list_name", nullable = false, unique = true)
+    @Column(name = "List_name", nullable = false, unique = true)
     private String listName;
     
+    @ManyToOne
+    @JoinColumn(name = "User_ID", nullable = false)
+    private User user;
+    
     @OneToMany(mappedBy = "movieList", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<UserMovie> movies = new ArrayList<>();
+    private List<UserMovie> userMovies = new ArrayList<>();
 
     public MovieList() {
     }
@@ -34,7 +37,7 @@ public class MovieList {
         this.listName = listName;
     }
     
-    public int getListID(){
+    public long getListID(){
         return listID;
     }
 
@@ -47,35 +50,22 @@ public class MovieList {
     }
 
     public List<UserMovie> getMovies() {
-        return new ArrayList<>(movies);
+        return new ArrayList<>(userMovies);
     }
 
     public void addMovie(UserMovie movie) {
         if (movie == null) {
             throw new IllegalArgumentException("Movie cannot be null");
         }
-        movies.add(movie);
-    }
-
-    public void removeMovieByTitle(String title) {
-        movies.removeIf(userMovie -> userMovie.getMovie().getMovieTitle().equals(title));
+        userMovies.add(movie);
     }
 
     public void removeMovieById(int movieID) {
-        movies.removeIf(userMovie -> userMovie.getMovie().getMovieID() == movieID);
+        userMovies.removeIf(userMovie -> userMovie.getMovie().getMovieID() == movieID);
     }
-
-    public boolean containsMovie(UserMovie movie) {
-        return movies.contains(movie);
-    }
-
-    public int getTotalMovies() {
-        return movies.size();
-    }
-
 
     @Override
     public String toString() {
-        return "MovieList{name='" + listName + "', totalMovies=" + movies.size() + "}";
+        return "MovieList{name='" + listName + "', totalMovies=" + userMovies.size() + "}";
     }
 }
