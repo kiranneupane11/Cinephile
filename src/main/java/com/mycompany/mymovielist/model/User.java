@@ -14,32 +14,56 @@ import jakarta.persistence.*;
  */
 
 @Entity
-@Table(name = "users")   
+@Table(name = "User")   
 public class User {
     
     @Id
-    private int userID;
+    private long userID;
     
     @Column(unique = true, nullable = false)
     protected String username;
     
+    @Column(unique = true, nullable = false)
+    private String email;
+    
+    @Column(nullable = false)
+    private String password;
+        
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @MapKey(name = "listName")
     private Map<String, MovieList> movieLists = new HashMap<>();
 
-    public User() {} // Required for JPA
+    public User() {} 
     
-    public User(int userID, String username) {
+    public User(int userID, String username, String email, String password) {
         this.username = username;
-        this.userID = userID; 
+        this.userID = userID;
+        this.email = email;
+        this.password = password;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public int getUserID() {
+    public long getUserID() {
         return userID;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Map<String, MovieList> getMovieLists() {

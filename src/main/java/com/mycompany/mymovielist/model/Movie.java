@@ -10,20 +10,20 @@ import jakarta.persistence.*;
  */
 
 @Entity
-@Table(name = "movies")
+@Table(name = "Movie")
 public class Movie {
 
     @Id
     @Column(name = "movie_id", nullable = false, updatable = false)
-    private int movieID;
+    private long movieID;
 
     @Column(name = "title", nullable = false, length = 75)
     private String title;
 
     @Column(name = "release_year", nullable = false)
-    private int releaseYear;
+    private Year releaseYear;
 
-    @Column(name = "genre", nullable = false, length = 50)
+    @Column(name = "genre", nullable = false, length = 75)
     private String genre;
 
     @Column(name = "rating", nullable = false)
@@ -35,7 +35,7 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(int movieID, String title, int releaseYear, String genre, double rating, String description) {
+    public Movie(int movieID, String title, Year releaseYear, String genre, double rating, String description) {
         setMovieID(movieID);
         setMovieTitle(title);
         setReleaseYear(releaseYear);
@@ -45,7 +45,7 @@ public class Movie {
     }
 
     
-    public int getMovieID(){
+    public long getMovieID(){
         return movieID;
         }
 
@@ -61,8 +61,8 @@ public class Movie {
     }
     
     public void setRating(double rating){
-        if(rating < 1 || rating > 10){
-            throw new IllegalArgumentException("Rating must be between 1 and 10");
+        if(rating < 0 || rating > 10){
+            throw new IllegalArgumentException("Rating must be between 0 and 10");
         }
         this.rating = Math.round(rating * 10) / 10.0 ;
     }
@@ -79,13 +79,13 @@ public class Movie {
         this.title = title;
     }
 
-    public int getReleaseYear() {
+    public Year getReleaseYear() {
         return releaseYear;
     }
 
-    public void setReleaseYear(int releaseYear) {
-        int currentYear = Year.now().getValue();
-        if(releaseYear < 1900 || releaseYear > currentYear){
+    public void setReleaseYear(Year releaseYear) {
+         Year currentYear = Year.now();
+        if(releaseYear.isAfter(currentYear)){
             throw new IllegalArgumentException("Release Year is out of range");
         }
         this.releaseYear = releaseYear;
