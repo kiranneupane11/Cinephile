@@ -1,7 +1,6 @@
 package com.mycompany.mymovielist.view;
 
 import com.mycompany.mymovielist.model.*;
-import com.mycompany.mymovielist.service.*;
 import com.mycompany.mymovielist.Database.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -16,7 +15,8 @@ public class DBUI {
     private final DBMovieRepository movieRepository;
     private final DBUserMovieRepository userMovieRepository;
     private final DBMovieListRepository movieListRepository;
-    private final UserListManager userListManager;
+    private User loggedInUser;
+    private boolean isAdmin;
 
     public DBUI() {
         this.scanner = new Scanner(System.in);
@@ -25,37 +25,40 @@ public class DBUI {
         this.userRepository = new DBUserRepository(entityManager);
         this.movieRepository = new DBMovieRepository(entityManager);
         this.userMovieRepository = new DBUserMovieRepository(entityManager);
-        this.userListManager = new UserListManager(userRepository);
         this.movieListRepository = new DBMovieListRepository(entityManager);
+        this.loggedInUser = null;
+        this.isAdmin = false;
     }
 
     public void start() {
-        System.out.println("Welcome to Movie List App!");
-        System.out.print("Enter your username: ");
-        String username = scanner.nextLine();
+        System.out.println("Welcome to CinePhile");
+        System.out.println("1. Login");
+        System.out.println("2. Sign Up");
+        System.out.print("Choose an option: ");
 
-        User user = userRepository.findByUsername(username).orElseGet(() -> {
-            User newUser = new User(new Random().nextInt(1000), username);
-            userRepository.add(newUser.getUserID(), newUser);
-            return newUser;
-        });
+        int choice = scanner.nextInt();
+        scanner.nextLine();
 
-        System.out.println("Hello, " + user.getUsername() + "!");
-        boolean isAdmin = username.equalsIgnoreCase("admin"); // Simple check for admin access
-        Admin admin = isAdmin ? new Admin(user.getUserID(), username, movieRepository) : null;
-
-        boolean running = true;
-        while (running) {
-            System.out.println("\nMenu:");
-            System.out.println("1. View Available Movies");
-            System.out.println("2. Create Movie List");
-            System.out.println("3. Add Movie to List");
-            System.out.println("4. View My Movie Lists");
-            if (isAdmin) {
-                System.out.println("5. Add Movie to Database");
-                System.out.println("6. Remove Movie from Database");
+        switch (choice) {
+            case 1 -> login();
+            case 2 -> signup();
+            default -> {
+                System.out.println("Invalid choice. Exiting...");
+                return;
             }
-            System.out.println("0. Exit");
+        }
+        
+        showMenu();
+
+    }
+    
+    private void showMenu() {
+        while (true) {
+            System.out.println("\nWhat would you like to do?");
+            System.out.println("1. View Available Movies");
+            System.out.println("2. Add to Watch List");
+            System.out.println("3. Create Custom List");
+            System.out.println("4. Logout");
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();
@@ -63,24 +66,60 @@ public class DBUI {
 
             switch (choice) {
                 case 1 -> viewAvailableMovies();
-                case 2 -> createMovieList(user);
-                case 3 -> addMovieToList(user);
-                case 4 -> viewMovieLists(user);
-                case 5 -> {
-                    if (isAdmin) addMovieToDatabase(admin);
-                    else System.out.println("Invalid option.");
+                case 2 -> {
+                    viewAvailableMovies();
+                    addMovieToList(loggedInUser);
                 }
-                case 6 -> {
-                    if (isAdmin) removeMovieFromDatabase(admin);
-                    else System.out.println("Invalid option.");
-                }
-                case 0 -> {
-                    running = false;
-                    System.out.println("Exiting...");
+                case 3 -> createCustomList(loggedInUser);
+                case 4 -> {
+                    System.out.println("Logging out...");
+                    return;
                 }
                 default -> System.out.println("Invalid choice. Try again.");
             }
         }
+    }
+    
+    private void login() {
+        System.out.print("Enter your username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter your password: ");
+        String password = scanner.nextLine();
+
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        if (userOpt.isEmpty() || !userOpt.get().getPassword().equals(password)) {
+            System.out.println("Invalid username or password.");
+            return;
+        }
+
+        loggedInUser = userOpt.get();
+        isAdmin = username.equalsIgnoreCase("admin");
+        System.out.println("Welcome, " + loggedInUser.getUsername() + "!");
+    }
+    
+    private void signup(){
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+
+        System.out.print("Enter email: ");
+        String email = scanner.nextLine();
+
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+        
+        if (userRepository.findByUsername(username).isPresent()) {
+            System.out.print("Error: Username already exists.");
+        }
+
+        if (userRepository.findByEmail(email).isPresent()) {
+            System.out.print("Error: Email already exists.");
+        }
+        
+        User newUser = new User(username, email, password);
+        userRepository.add(newUser.getUserID(), newUser);
+        System.out.println("Hello, " + newUser.getUsername() + "!");
     }
 
     private void viewAvailableMovies() {
@@ -95,51 +134,30 @@ public class DBUI {
         }
     }
 
-    private void createMovieList(User user) {
-        System.out.print("Enter the name of the new movie list: ");
+    private void createCustomList(User user) {
+        System.out.print("Enter the name of the movie list: ");
         String listName = scanner.nextLine();
 
-        if (user.createMovieList(listName)) {
-            MovieList newList = user.getMovieLists().get(listName);
-
-            // ✅ Persist the new list in the database
-            movieListRepository.add(newList.getListID(), newList);
-
-            System.out.println("Movie list '" + listName + "' created successfully!");
-        } else {
-            System.out.println("A list with this name already exists.");
-        }
-    }
-
-    private void addMovieToList(User user) {
-        if (user.getMovieLists().isEmpty()) {
-            System.out.println("You don't have any movie lists. Create one first.");
-            return;
-        }
-
-        System.out.println("Select a movie to add:");
+        MovieList customList = user.createOrGetMovieList(listName);
+        movieListRepository.add(customList.getListID(), customList);
+        
+        System.out.println("Choose a movie to add:");
         viewAvailableMovies();
+        
         System.out.print("Enter movie ID: ");
-        int movieId = scanner.nextInt();
+        long movieId = scanner.nextLong();
         scanner.nextLine();
-
+        
         Movie movie = movieRepository.get(movieId).orElse(null);
         if (movie == null) {
             System.out.println("Invalid movie ID.");
             return;
         }
 
-        System.out.println("Select a movie list:");
-        user.getMovieLists().keySet().forEach(System.out::println);
-        System.out.print("Enter list name: ");
-        String listName = scanner.nextLine();
-
-        MovieList movieList = user.getMovieLists().get(listName);
-        if (movieList == null) {
-            System.out.println("List not found.");
-            return;
-        }
-
+        System.out.print("Enter your rating for this movie: ");
+        double rating = scanner.nextDouble();
+        scanner.nextLine();
+        
         System.out.println("Select movie status:");
         for (UserMovie.Status status : UserMovie.Status.values()) {
             System.out.println(status.ordinal() + 1 + ". " + status);
@@ -150,13 +168,51 @@ public class DBUI {
         scanner.nextLine();
         UserMovie.Status status = statusChoice < 1 || statusChoice > UserMovie.Status.values().length ? UserMovie.Status.Plan_To_Watch : UserMovie.Status.values()[statusChoice - 1];
 
+        MovieList createdList = user.createOrGetMovieList(listName);
+        movieListRepository.add(movieId, createdList);
+
+        UserMovie userMovie = new UserMovie(movie, createdList, rating, status);
+        createdList.addMovie(userMovie); 
+        userMovieRepository.add(userMovie.getId(), userMovie);
+              
+        System.out.println("Movie list '" + listName + "' created successfully!");
+    }
+
+    private void addMovieToList(User user) {
+        
+        System.out.println("Choose a movie to add:");
+        viewAvailableMovies();
+        System.out.print("Enter movie ID: ");
+        long movieId = scanner.nextLong();
+        scanner.nextLine();
+
+        Movie movie = movieRepository.get(movieId).orElse(null);
+        if (movie == null) {
+            System.out.println("Invalid movie ID.");
+            return;
+        }
+
         System.out.print("Enter your rating for this movie: ");
         double rating = scanner.nextDouble();
         scanner.nextLine();
+        
+        System.out.println("Select movie status:");
+        for (UserMovie.Status status : UserMovie.Status.values()) {
+            System.out.println(status.ordinal() + 1 + ". " + status);
+        }
+        System.out.print("Enter choice (1-" + UserMovie.Status.values().length + "): ");
 
-        UserMovie userMovie = new UserMovie(movie, movieList, rating, status);
+        int statusChoice = scanner.nextInt();
+        scanner.nextLine();
+        UserMovie.Status status = statusChoice < 1 || statusChoice > UserMovie.Status.values().length ? UserMovie.Status.Plan_To_Watch : UserMovie.Status.values()[statusChoice - 1];
+
+        String listName = status.name();
+        MovieList createdList = user.createOrGetMovieList(listName);
+        movieListRepository.add(movieId, createdList);
+
+        UserMovie userMovie = new UserMovie(movie, createdList, rating, status);
+        createdList.addMovie(userMovie); 
         userMovieRepository.add(userMovie.getId(), userMovie);
-        movieList.addMovie(userMovie);
         
         System.out.println("Movie added to list successfully!");
     }
@@ -176,38 +232,38 @@ public class DBUI {
         }
     }
 
-    private void addMovieToDatabase(Admin admin) {
-        System.out.print("Enter movie ID: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Enter movie title: ");
-        String title = scanner.nextLine();
-
-        System.out.print("Enter release year: ");
-        int year = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Enter genre: ");
-        String genre = scanner.nextLine();
-
-        System.out.print("Enter rating: ");
-        double rating = scanner.nextDouble();
-        scanner.nextLine();
-
-        System.out.print("Enter description: ");
-        String description = scanner.nextLine();
-
-        admin.addMovie(id, title, year, genre, rating, description);
-    }
-
-    private void removeMovieFromDatabase(Admin admin) {
-        System.out.print("Enter movie ID to remove: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-
-        entityManager.getTransaction().begin();
-        admin.removeMovie(id);
-        entityManager.getTransaction().commit();
-    }
+//    private void addMovieToDatabase(Admin admin) {
+//        System.out.print("Enter movie ID: ");
+//        int id = scanner.nextInt();
+//        scanner.nextLine();
+//
+//        System.out.print("Enter movie title: ");
+//        String title = scanner.nextLine();
+//
+//        System.out.print("Enter release year: ");
+//        int year = scanner.nextInt();
+//        scanner.nextLine();
+//
+//        System.out.print("Enter genre: ");
+//        String genre = scanner.nextLine();
+//
+//        System.out.print("Enter rating: ");
+//        double rating = scanner.nextDouble();
+//        scanner.nextLine();
+//
+//        System.out.print("Enter description: ");
+//        String description = scanner.nextLine();
+//
+//        admin.addMovie(id, title, year, genre, rating, description);
+//    }
+//
+//    private void removeMovieFromDatabase(Admin admin) {
+//        System.out.print("Enter movie ID to remove: ");
+//        int id = scanner.nextInt();
+//        scanner.nextLine();
+//
+//        entityManager.getTransaction().begin();
+//        admin.removeMovie(id);
+//        entityManager.getTransaction().commit();
+//    }
 }

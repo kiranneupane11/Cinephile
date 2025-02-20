@@ -35,7 +35,7 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(int movieID, String title, Year releaseYear, String genre, double rating, String description) {
+    public Movie(String title, Year releaseYear, String genre, double rating, String description) {
         setMovieTitle(title);
         setReleaseYear(releaseYear);
         setRating(rating);

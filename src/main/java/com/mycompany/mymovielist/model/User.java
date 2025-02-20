@@ -18,16 +18,17 @@ import jakarta.persistence.*;
 public class User {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userID;
     
     @Column(unique = true, nullable = false)
     protected String username;
     
     @Column(unique = true, nullable = false)
-    private String email;
+    protected String email;
     
     @Column(nullable = false)
-    private String password;
+    protected String password;
         
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @MapKey(name = "listName")
@@ -35,9 +36,8 @@ public class User {
 
     public User() {} 
     
-    public User(int userID, String username, String email, String password) {
+    public User(String username, String email, String password) {
         this.username = username;
-        this.userID = userID;
         this.email = email;
         this.password = password;
     }
@@ -68,16 +68,12 @@ public class User {
 
     public Map<String, MovieList> getMovieLists() {
         return Collections.unmodifiableMap(movieLists);
+    }   
+    
+    public MovieList createOrGetMovieList(String listName){
+        return movieLists.computeIfAbsent(listName, MovieList::new);
     }
     
-    public boolean createMovieList(String listName) {
-        if (movieLists.containsKey(listName)) {
-            return false; 
-        }
-        movieLists.put(listName, new MovieList(listName));
-        return true;
-    }
-
     public void addMovieList(MovieList movieList) {
         movieLists.put(movieList.getListName(), movieList);
     }

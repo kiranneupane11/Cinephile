@@ -14,7 +14,7 @@ import jakarta.persistence.EntityTransaction;
  *
  * @author kiran
  */
-public class DBUserRepository extends DatabaseRepository<User, Integer> {
+public class DBUserRepository extends DatabaseRepository<User, Long> {
     public DBUserRepository(EntityManager entityManager) {
         super(User.class, entityManager);
     }
@@ -23,6 +23,14 @@ public class DBUserRepository extends DatabaseRepository<User, Integer> {
     public Optional<User> findByUsername(String username) {
         return entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
                 .setParameter("username", username)
+                .getResultStream()
+                .findFirst();
+    }
+    
+    @Transactional
+    public Optional<User> findByEmail(String email) {
+        return entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+                .setParameter("email", email)
                 .getResultStream()
                 .findFirst();
     }

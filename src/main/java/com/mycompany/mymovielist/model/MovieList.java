@@ -20,7 +20,7 @@ public class MovieList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long listID;
     
-    @Column(name = "List_name", nullable = false, unique = true)
+    @Column(name = "List_Name", nullable = false, unique = true)
     private String listName;
     
     @ManyToOne
@@ -35,6 +35,7 @@ public class MovieList {
     
     public MovieList(String listName) { 
         this.listName = listName;
+        this.user = user;
     }
     
     public long getListID(){

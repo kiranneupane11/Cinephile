@@ -11,7 +11,7 @@ package com.mycompany.mymovielist.Database;
 import com.mycompany.mymovielist.model.MovieList;
 import jakarta.persistence.EntityManager;
 
-public class DBMovieListRepository extends DatabaseRepository<MovieList, Integer> {
+public class DBMovieListRepository extends DatabaseRepository<MovieList, Long> {
     public DBMovieListRepository(EntityManager entityManager) {
         super(MovieList.class, entityManager);
     }

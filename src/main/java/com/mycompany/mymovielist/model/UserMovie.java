@@ -12,25 +12,25 @@ import jakarta.persistence.*;
  */
 
 @Entity
-@Table(name = "user_movies")
+@Table(name = "UserMovie")
 public class UserMovie{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Status status;
 
     @Column(nullable = true)
     private double rating;
 
     @ManyToOne
-    @JoinColumn(name = "movie_id", nullable = false)
+    @JoinColumn(name = "movieID", nullable = false)
     private Movie movie;
 
     @ManyToOne
-    @JoinColumn(name = "movie_list_id", nullable = false)
+    @JoinColumn(name = "listID", nullable = false)
     private MovieList movieList;
     
     public enum Status {
@@ -52,7 +52,7 @@ public class UserMovie{
         setRating(rating);
     }
     
-    public int getId(){
+    public long getId(){
         return id;
     }
     
