@@ -58,7 +58,8 @@ public class DBUI {
             System.out.println("1. View Available Movies");
             System.out.println("2. Add to Watch List");
             System.out.println("3. Create Custom List");
-            System.out.println("4. Logout");
+            System.out.println("4. View Your Lists");
+            System.out.println("5. Log Out");            
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();

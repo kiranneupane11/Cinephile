@@ -45,7 +45,13 @@
         <groupId>org.hibernate.orm</groupId>
         <artifactId>hibernate-core</artifactId>
         <version>6.6.8.Final</version>
-            </dependency>        
+            </dependency>
+            
+            <dependency>
+                <groupId>org.mindrot</groupId>
+                <artifactId>jbcrypt</artifactId>
+                <version>0.4</version>
+            </dependency>
         
     </dependencies>
 </project>

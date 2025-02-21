@@ -6,6 +6,7 @@ package com.mycompany.mymovielist.model;
 
 import java.util.*;
 import jakarta.persistence.*;
+import com.mycompany.mymovielist.util.PasswordUtil;
 
 
 /**
@@ -36,18 +37,22 @@ public class User {
 
     public User() {} 
     
-    public User(String username, String email, String password) {
+    public User(String username, String email, String rawPassword) {
         this.username = username;
         this.email = email;
-        this.password = password;
+        this.password = PasswordUtil.hashPassword(rawPassword);
     }
 
     public String getUsername() {
         return username;
     }
-
+    
     public long getUserID() {
         return userID;
+    }
+    
+    public boolean checkPassword(String rawPassword) {
+        return PasswordUtil.verifyPassword(rawPassword, this.password);
     }
     
     public String getEmail() {
