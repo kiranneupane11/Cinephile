@@ -216,18 +216,43 @@ public class DBUI {
     }
 
     private void viewMovieLists(User user) {
-        if (user.getMovieLists().isEmpty()) {
-            System.out.println("You don't have any movie lists.");
-            return;
+        System.out.println("Your Lists: ");
+        List<MovieList> userLists = movieListRepository.findByUser(user);
+        
+        if (userLists.isEmpty()) {
+        System.out.println("You have no movie lists.");
+        return;
         }
+        
+        for(MovieList list : userLists ){
+            System.out.println("ID: " + list.getListID() + " | Name: " + list.getListName());
+        }
+       
+        System.out.println("Enter List ID:  ");
+        long listID = scanner.nextLong();
+        Optional<MovieList> selectedList = movieListRepository.get(listID);        
 
-        System.out.println("\nYour Movie Lists:");
-        for (Map.Entry<String, MovieList> entry : user.getMovieLists().entrySet()) {
-            System.out.println("List: " + entry.getKey());
-            for (UserMovie um : entry.getValue().getMovies()) {
-                System.out.println(" - " + um.getMovie().getMovieTitle() + " (" + um.getRating() + "/10)");
+        if (selectedList.isEmpty()) {
+        System.out.println("Invalid List ID.");
+        return;
+        }
+        
+        MovieList movieList = selectedList.get();
+        List<UserMovie> movies = userMovieRepository.findByMovieList(movieList);
+
+        System.out.println("Movies in '" + movieList.getListName() + "':");
+        
+        if (movies.isEmpty()) {
+            System.out.println("No movies found in this list.");
+        } else {
+            for(UserMovie userMovie : movies){
+                Movie movie = userMovie.getMovie();
+                System.out.println("ID: " + movie.getMovieID() + " | Title: " + movie.getMovieTitle() + 
+                               " | Rating: " + userMovie.getRating() + 
+                               " | Status: " + userMovie.getStatus());
             }
         }
+        
     }
 
 //    private void addMovieToDatabase(Admin admin) {

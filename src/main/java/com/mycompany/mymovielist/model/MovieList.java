@@ -41,6 +41,10 @@ public class MovieList {
     public long getListID(){
         return listID;
     }
+    
+    public User getUser(){
+        return user;
+    }
 
     public String getListName() {
         return listName;
