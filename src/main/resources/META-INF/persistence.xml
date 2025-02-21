@@ -9,7 +9,7 @@
             <property name="jakarta.persistence.jdbc.password" value="*Strongpin123"/>
 
             <!-- Hibernate Configuration -->
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="none"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
