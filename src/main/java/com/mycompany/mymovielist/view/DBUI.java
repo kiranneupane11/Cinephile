@@ -71,8 +71,10 @@ public class DBUI {
                     addMovieToList(loggedInUser);
                 }
                 case 3 -> createCustomList(loggedInUser);
-                case 4 -> {
+                case 4 -> viewMovieLists(loggedInUser);
+                case 5 -> {
                     System.out.println("Logging out...");
+                    start();
                     return;
                 }
                 default -> System.out.println("Invalid choice. Try again.");
@@ -135,7 +137,7 @@ public class DBUI {
     }
 
     private void createCustomList(User user) {
-        System.out.print("Enter the name of the movie list: ");
+        System.out.print("Enter name of custom list: ");
         String listName = scanner.nextLine();
 
         MovieList customList = user.createOrGetMovieList(listName);
@@ -167,12 +169,8 @@ public class DBUI {
         int statusChoice = scanner.nextInt();
         scanner.nextLine();
         UserMovie.Status status = statusChoice < 1 || statusChoice > UserMovie.Status.values().length ? UserMovie.Status.Plan_To_Watch : UserMovie.Status.values()[statusChoice - 1];
-
-        MovieList createdList = user.createOrGetMovieList(listName);
-        movieListRepository.add(movieId, createdList);
-
-        UserMovie userMovie = new UserMovie(movie, createdList, rating, status);
-        createdList.addMovie(userMovie); 
+        UserMovie userMovie = new UserMovie(movie, customList, rating, status);
+        customList.addMovie(userMovie); 
         userMovieRepository.add(userMovie.getId(), userMovie);
               
         System.out.println("Movie list '" + listName + "' created successfully!");
@@ -208,7 +206,7 @@ public class DBUI {
 
         String listName = status.name();
         MovieList createdList = user.createOrGetMovieList(listName);
-        movieListRepository.add(movieId, createdList);
+        movieListRepository.add(createdList.getListID(), createdList);
 
         UserMovie userMovie = new UserMovie(movie, createdList, rating, status);
         createdList.addMovie(userMovie); 

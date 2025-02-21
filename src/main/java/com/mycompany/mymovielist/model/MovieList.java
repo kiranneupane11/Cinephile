@@ -13,14 +13,14 @@ import jakarta.persistence.*;
  */
 
 @Entity
-@Table(name = "List")
+@Table(name = "List", uniqueConstraints = @UniqueConstraint(columnNames = {"User_ID", "List_Name"}))
 public class MovieList {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long listID;
     
-    @Column(name = "List_Name", nullable = false, unique = true)
+    @Column(name = "List_Name", nullable = false)
     private String listName;
     
     @ManyToOne
@@ -33,7 +33,7 @@ public class MovieList {
     public MovieList() {
     }
     
-    public MovieList(String listName) { 
+    public MovieList(String listName, User user) { 
         this.listName = listName;
         this.user = user;
     }
@@ -51,7 +51,7 @@ public class MovieList {
     }
 
     public List<UserMovie> getMovies() {
-        return new ArrayList<>(userMovies);
+        return userMovies;
     }
 
     public void addMovie(UserMovie movie) {

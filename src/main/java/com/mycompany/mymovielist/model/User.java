@@ -30,7 +30,7 @@ public class User {
     @Column(nullable = false)
     protected String password;
         
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @MapKey(name = "listName")
     private Map<String, MovieList> movieLists = new HashMap<>();
 
@@ -70,9 +70,12 @@ public class User {
         return Collections.unmodifiableMap(movieLists);
     }   
     
-    public MovieList createOrGetMovieList(String listName){
-        return movieLists.computeIfAbsent(listName, MovieList::new);
-    }
+    public MovieList createOrGetMovieList(String listName) {
+    return movieLists.computeIfAbsent(listName, key -> {
+        MovieList newList = new MovieList(listName, this);  
+        return newList;
+    });
+}
     
     public void addMovieList(MovieList movieList) {
         movieLists.put(movieList.getListName(), movieList);
