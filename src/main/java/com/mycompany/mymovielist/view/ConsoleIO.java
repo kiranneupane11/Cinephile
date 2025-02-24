@@ -34,4 +34,11 @@ public class ConsoleIO {
         return scanner.nextLine();
     }
     
+    public long readLong(String prompt) {
+        displayMessage(prompt);
+        long num = scanner.nextLong();
+        scanner.nextLine(); // consume newline
+        return num;
+    }
+    
 }

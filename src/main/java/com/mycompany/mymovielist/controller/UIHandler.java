@@ -33,13 +33,13 @@ public class UIHandler {
         return Optional.empty();
     }
     
-    public boolean signup(String username, String email, String password) {
+    public Optional<User> signup(String username, String email, String password) {
         if (userRepository.findByUsername(username).isPresent() || userRepository.findByEmail(email).isPresent()) {
-            return false; // Username or email already exists
+            return Optional.empty(); 
         }
         User newUser = new User(username, email, password);
         userRepository.add(newUser.getUserID(), newUser);
-        return true;
+        return Optional.of(newUser);
     }
     
     public List<Movie> getAvailableMovies() {

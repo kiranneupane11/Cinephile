@@ -4,6 +4,7 @@
  */
 package com.mycompany.mymovielist.view;
 import java.util.*;
+import com.mycompany.mymovielist.commands.*;
 import com.mycompany.mymovielist.model.*;
 import com.mycompany.mymovielist.controller.*;
 import jakarta.persistence.*;
@@ -25,7 +26,7 @@ public class NewUI {
     
     public NewUI(){
         this.io = new ConsoleIO();
-        this.emf = Persistence.createEntityManagerFactory("MyMovieList");
+        this.emf = Persistence.createEntityManagerFactory("MovieListPU");
         this.em = emf.createEntityManager();
         this.uiHandler = new UIHandler(em);
     }
@@ -41,9 +42,18 @@ public class NewUI {
             default -> {
                 io.displayMessage("Invalid Choice. Exiting...");
                 return;
-            }
-        
+            }    
         }
+        
+        if(loggedInUser != null){
+            NavigationManager navManager = new NavigationManager(io);
+            // Register commands for the main menu
+            navManager.registerCommand(1, new ViewAvailableMoviesCommand(io, uiHandler));
+            navManager.registerCommand(2, new AddMovieToListCommand(io, uiHandler, loggedInUser));
+            navManager.registerCommand(3, new ViewMovieListsCommand(io, uiHandler, loggedInUser));
+            navManager.registerCommand(4, new LogoutCommand(this, navManager));
+            navManager.startNavigation();
+        } 
     }
     
     private void login(){
@@ -68,7 +78,8 @@ public class NewUI {
                 .ifPresentOrElse(
                         user -> io.displayMessage("Sign up successful! Welcome, " + username + "!"),
                         () -> io.displayMessage("Error: Username or email already exists.")
-                ); 
+                );
+        start();
     }
     
     public void logout(){
