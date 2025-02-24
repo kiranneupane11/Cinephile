@@ -69,7 +69,7 @@ public class UIHandler {
         return movieListRepository.get(listId);
     }
 
-    public List<UserMovie> getMoviesInList(MovieList list) {
-        return userMovieRepository.findByMovieList(list);
+    public List<UserMovie> getMoviesInList(long listId) {
+        return userMovieRepository.findByListID(listId);
     }
 }

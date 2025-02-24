@@ -144,5 +144,26 @@ public class UI {
         for (MovieList list : lists) {
             System.out.println(list.getListID() + ". " + list.getListName());
         }
+        displayList();
+    }
+    
+    private void displayList(){
+        System.out.println("Enter List ID to view it: ");
+        long listID = scanner.nextLong();
+        
+        List<UserMovie> movies = uiHandler.getMoviesInList(listID);
+        
+        for(UserMovie userMovie: movies ){
+            Movie movie = userMovie.getMovie();
+            System.out.println("ID: " + movie.getMovieID() + 
+                               " | Title: " + movie.getMovieTitle() + 
+                               " | Genre: " + movie.getGenre() +
+                               " | Rating: " + userMovie.getRating() + 
+                               " | Status: " + userMovie.getStatus() +
+                               " | Description: " + movie.getDescription());
+        }
     }
 }
+
+
+// Check gpt history to add method to display movies in a list
