@@ -164,6 +164,3 @@ public class UI {
         }
     }
 }
-
-
-// Check gpt history to add method to display movies in a list

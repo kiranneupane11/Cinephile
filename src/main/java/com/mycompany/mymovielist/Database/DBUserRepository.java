@@ -8,7 +8,6 @@ import com.mycompany.mymovielist.model.*;
 import java.util.*;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
 
 /**
  *
