@@ -16,10 +16,10 @@ public class DBUserMovieRepository extends DatabaseRepository<UserMovie, Long> {
         super(UserMovie.class, entityManager);
     }
     
-    public List<UserMovie> findByListID(long listID){
+    public List<UserMovie> findByListID(Long userId){
         return entityManager.createQuery(
-        "SELECT um FROM UserMovie um WHERE um.movieList.id = :listID", UserMovie.class)
-                .setParameter("listID", listID)
+        "SELECT um FROM UserMovie um WHERE um.userId = :userId", UserMovie.class)
+                .setParameter("userId", userId)
                 .getResultList();
     }
 }

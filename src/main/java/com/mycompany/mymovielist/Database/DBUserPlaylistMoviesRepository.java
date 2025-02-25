@@ -19,7 +19,7 @@ public class DBUserPlaylistMoviesRepository extends DatabaseRepository<UserPlayl
     
     public List<UserPlaylistMovies> findByPlaylistId(Long playlistId) {
         return entityManager.createQuery(
-            "SELECT mli FROM MovieListItem mli WHERE mli.userPlaylist.id = :playlistId", 
+            "SELECT upm FROM UserPlaylistMovies upm WHERE upm.listId :playlistId", 
             UserPlaylistMovies.class)
             .setParameter("playlistId", playlistId)
             .getResultList();

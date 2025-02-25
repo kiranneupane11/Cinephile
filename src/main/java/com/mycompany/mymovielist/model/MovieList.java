@@ -25,8 +25,9 @@ public class MovieList extends BaseEntity {
     public MovieList() {
     }
     
-    public MovieList(String listName) { 
+    public MovieList(String listName, Long userId) { 
         this.listName = listName;
+        this.userId = userId;
     }
 
     public String getListName() {
@@ -36,24 +37,20 @@ public class MovieList extends BaseEntity {
     public void setListName(String listName) {
         this.listName = listName;
     }
-
-    public List<UserMovie> getMovies() {
-        return userMovies;
+    
+    public List<MovieList> getMovieLists() {
+    return movieLists;
+    }  
+    
+    public MovieList createOrGetMovieList(String listName) {
+    return movieLists.stream()
+                     .filter(list -> list.getListName().equalsIgnoreCase(listName))
+                     .findFirst()
+                     .orElseGet(() -> {
+                         MovieList newList = new MovieList(listName);
+                         movieLists.add(newList);
+                         return newList;
+                     });
     }
 
-    public void addMovie(UserMovie movie) {
-        if (movie == null) {
-            throw new IllegalArgumentException("Movie cannot be null");
-        }
-        userMovies.add(movie);
-    }
-
-    public void removeMovieById(int movieID) {
-        userMovies.removeIf(userMovie -> userMovie.getMovie().getId() == movieID);
-    }
-
-    @Override
-    public String toString() {
-        return "MovieList{name='" + listName + "', totalMovies=" + userMovies.size() + "}";
-    }
 }

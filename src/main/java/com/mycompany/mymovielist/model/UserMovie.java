@@ -38,7 +38,9 @@ public class UserMovie extends BaseEntity{
     public UserMovie() {
     }
     
-    public UserMovie(double rating, Status status){
+    public UserMovie(Long movieId, double rating, Status status, Long userId){
+        this.movieId = movieId;
+        this.userId = userId;
         setStatus(status);
         setRating(rating);
     }          
