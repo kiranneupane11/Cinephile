@@ -10,7 +10,7 @@ import jakarta.persistence.*;
  */
 
 @Entity
-@Table(name = "Movie")
+@Table(name = "movie")
 @AttributeOverride(name = "id", column = @Column(name = "movieID"))
 public class Movie extends BaseEntity{
 

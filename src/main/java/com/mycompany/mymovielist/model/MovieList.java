@@ -13,31 +13,20 @@ import jakarta.persistence.*;
  */
 
 @Entity
-@Table(name = "List", uniqueConstraints = @UniqueConstraint(columnNames = {"User_ID", "List_Name"}))
-@AttributeOverride(name = "id", column = @Column(name = "listID"))
+@Table(name = "user_playlist", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "name"}))
 public class MovieList extends BaseEntity {
     
     @Column(name = "List_Name", nullable = false)
     private String listName;
     
-    @ManyToOne
-    @JoinColumn(name = "User_ID", nullable = false)
-    private User user;
-    
-    @OneToMany(mappedBy = "movieList", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<UserMovie> userMovies = new ArrayList<>();
+    @Column(name = "user_id")
+    private Long userId;
 
     public MovieList() {
     }
     
-    public MovieList(String listName, User user) { 
+    public MovieList(String listName) { 
         this.listName = listName;
-        this.user = user;
-    }
-    
-    
-    public User getUser(){
-        return user;
     }
 
     public String getListName() {

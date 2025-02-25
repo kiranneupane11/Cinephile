@@ -15,7 +15,7 @@ import com.mycompany.mymovielist.util.PasswordUtil;
  */
 
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 @AttributeOverride(name = "id", column = @Column(name = "userID"))
 public class User extends BaseEntity {
     
