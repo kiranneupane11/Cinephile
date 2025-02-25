@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.mymovielist.view;
-import java.util.*;
 import com.mycompany.mymovielist.commands.*;
 import com.mycompany.mymovielist.model.*;
 import com.mycompany.mymovielist.controller.*;

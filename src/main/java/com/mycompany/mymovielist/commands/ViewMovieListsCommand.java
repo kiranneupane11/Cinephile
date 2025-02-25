@@ -32,7 +32,7 @@ public class ViewMovieListsCommand implements Command {
             return;
         }
         for (MovieList list : lists) {
-            io.displayMessage(list.getListID() + ". " + list.getListName());
+            io.displayMessage(list.getId() + ". " + list.getListName());
         }
         
         // Prompt for a list ID to view its movies
@@ -46,7 +46,7 @@ public class ViewMovieListsCommand implements Command {
         // Display details for each movie in the selected list
         for (UserMovie userMovie : movies) {
             Movie movie = userMovie.getMovie();
-            io.displayMessage("ID: " + movie.getMovieID() +
+            io.displayMessage("ID: " + movie.getId() +
                               " | Title: " + movie.getMovieTitle() +
                               " | Genre: " + movie.getGenre() +
                               " | Rating: " + userMovie.getRating() +

@@ -13,7 +13,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "UserMovie")
-public class UserMovie{
+public class UserMovie extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -51,11 +51,7 @@ public class UserMovie{
         setStatus(status);
         setRating(rating);
     }
-    
-    public long getId(){
-        return id;
-    }
-    
+  
     public Movie getMovie(){
         return movie;
     }

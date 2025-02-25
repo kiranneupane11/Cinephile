@@ -14,11 +14,8 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "List", uniqueConstraints = @UniqueConstraint(columnNames = {"User_ID", "List_Name"}))
-public class MovieList {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long listID;
+@AttributeOverride(name = "id", column = @Column(name = "listID"))
+public class MovieList extends BaseEntity {
     
     @Column(name = "List_Name", nullable = false)
     private String listName;
@@ -38,9 +35,6 @@ public class MovieList {
         this.user = user;
     }
     
-    public long getListID(){
-        return listID;
-    }
     
     public User getUser(){
         return user;
@@ -66,7 +60,7 @@ public class MovieList {
     }
 
     public void removeMovieById(int movieID) {
-        userMovies.removeIf(userMovie -> userMovie.getMovie().getMovieID() == movieID);
+        userMovies.removeIf(userMovie -> userMovie.getMovie().getId() == movieID);
     }
 
     @Override

@@ -15,12 +15,9 @@ import com.mycompany.mymovielist.util.PasswordUtil;
  */
 
 @Entity
-@Table(name = "User")   
-public class User {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userID;
+@Table(name = "User")
+@AttributeOverride(name = "id", column = @Column(name = "userID"))
+public class User extends BaseEntity {
     
     @Column(unique = true, nullable = false)
     protected String username;
@@ -45,10 +42,6 @@ public class User {
 
     public String getUsername() {
         return username;
-    }
-    
-    public long getUserID() {
-        return userID;
     }
     
     public boolean checkPassword(String rawPassword) {

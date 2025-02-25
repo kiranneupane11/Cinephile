@@ -29,7 +29,7 @@ public class ViewAvailableMoviesCommand implements Command{
             io.displayMessage("No movies available.");
         } else {
             for (Movie movie : movies) {
-                io.displayMessage(movie.getMovieID() + ". " + movie.getMovieTitle());
+                io.displayMessage(movie.getId() + ". " + movie.getMovieTitle());
             }
         }
     }

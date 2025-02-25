@@ -38,7 +38,7 @@ public class UIHandler {
             return Optional.empty(); 
         }
         User newUser = new User(username, email, password);
-        userRepository.add(newUser.getUserID(), newUser);
+        userRepository.add(newUser.getId(), newUser);
         return Optional.of(newUser);
     }
     
@@ -52,7 +52,7 @@ public class UIHandler {
         
         String listName = status.name();
         MovieList createdList = user.createOrGetMovieList(listName);
-        movieListRepository.add(createdList.getListID(), createdList);
+        movieListRepository.add(createdList.getId(), createdList);
 
         UserMovie userMovie = new UserMovie(movieOpt.get(), createdList, rating, status);
         createdList.addMovie(userMovie);

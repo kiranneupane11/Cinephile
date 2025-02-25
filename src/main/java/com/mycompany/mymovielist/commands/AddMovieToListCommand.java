@@ -31,7 +31,7 @@ public class AddMovieToListCommand implements Command{
             return;
         }
         for (Movie movie : movies) {
-            io.displayMessage(movie.getMovieID() + ". " + movie.getMovieTitle());
+            io.displayMessage(movie.getId() + ". " + movie.getMovieTitle());
         }
         long movieId = io.readLong("Enter movie ID: ");
         double rating = Double.parseDouble(io.readString("Enter your rating: "));

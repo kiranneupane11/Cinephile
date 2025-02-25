@@ -11,11 +11,8 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Movie")
-public class Movie {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long movieID;
+@AttributeOverride(name = "id", column = @Column(name = "movieID"))
+public class Movie extends BaseEntity{
 
     @Column(name = "Title", nullable = false, length = 75)
     private String title;
@@ -42,11 +39,6 @@ public class Movie {
         this.genre = genre;
         this.description = description;
     }
-
-    
-    public long getMovieID(){
-        return movieID;
-        }
     
     public double getRating(){
         return rating;
