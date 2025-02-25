@@ -13,7 +13,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class PasswordUtil {
     // Hash a password using BCrypt
     public static String hashPassword(String plainPassword) {
-        return BCrypt.hashpw(plainPassword, BCrypt.gensalt(8)); // 12 is the strength factor
+        return BCrypt.hashpw(plainPassword, BCrypt.gensalt(8)); // 8 is the strength factor
     }
 
     // Verify if a plain password matches a hashed password

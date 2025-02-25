@@ -28,9 +28,8 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     protected String password;
         
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @MapKey(name = "listName")
-    private Map<String, MovieList> movieLists = new HashMap<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<MovieList> movieLists = new ArrayList<>();
 
     public User() {} 
     
@@ -64,18 +63,18 @@ public class User extends BaseEntity {
         this.password = password;
     }
 
-    public Map<String, MovieList> getMovieLists() {
-        return Collections.unmodifiableMap(movieLists);
-    }   
+    public List<MovieList> getMovieLists() {
+    return movieLists;
+}  
     
     public MovieList createOrGetMovieList(String listName) {
-    return movieLists.computeIfAbsent(listName, key -> {
-        MovieList newList = new MovieList(listName, this);  
-        return newList;
-    });
-}
-    
-    public void addMovieList(MovieList movieList) {
-        movieLists.put(movieList.getListName(), movieList);
+    return movieLists.stream()
+                     .filter(list -> list.getListName().equalsIgnoreCase(listName))
+                     .findFirst()
+                     .orElseGet(() -> {
+                         MovieList newList = new MovieList(listName, this);
+                         movieLists.add(newList);
+                         return newList;
+                     });
     }
 }

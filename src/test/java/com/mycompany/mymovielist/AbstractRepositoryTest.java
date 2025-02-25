@@ -4,7 +4,7 @@
 // */
 //package com.mycompany.mymovielist;
 //import com.mycompany.mymovielist.model.*;
-//import com.mycompany.mymovielist.repository.*;
+//import com.mycompany.mymovielist.Database.*;
 //
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
@@ -19,18 +19,18 @@
 // */
 //class AbstractRepositoryTest {
 //
-//    private MovieRepository movieRepository;
-//    private UserRepository userRepository;
+//    private DBMovieRepository movieRepository;
+//    private DBUserRepository userRepository;
 //
 //    @BeforeEach
 //    void setUp() {
-//        movieRepository = new MovieRepository();
+//        movieRepository = new DBMovieRepository();
 //        userRepository = new UserRepository();
 //    }
 //
 //    @Test
 //    void testAddAndRetrieveMovie() {
-//        Movie movie = new Movie(1, "Inception", 2010, "Sci-Fi", 8.8, "A mind-bending thriller");
+//        Movie movie = new Movie("Inception", 2010, "Sci-Fi", 8.8, "A mind-bending thriller");
 //        movieRepository.add(1, movie);
 //
 //        Optional<Movie> retrievedMovie = movieRepository.get(1);

@@ -14,10 +14,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "UserMovie")
 public class UserMovie extends BaseEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+    
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private Status status;
@@ -45,7 +42,6 @@ public class UserMovie extends BaseEntity{
     
     public UserMovie(Movie movie, MovieList movieList, double rating, Status status){
         
-        this.id = id;
         this.movie = movie;
         this.movieList = movieList;
         setStatus(status);
