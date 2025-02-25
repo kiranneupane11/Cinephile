@@ -7,6 +7,7 @@ package com.mycompany.mymovielist.controller;
 import com.mycompany.mymovielist.model.*;
 import com.mycompany.mymovielist.Database.*;
 import jakarta.persistence.EntityManager;
+import com.mycompany.mymovielist.util.*;
 import java.util.*;
 /**
  *
@@ -27,7 +28,7 @@ public class UIHandler {
     
     public Optional<User> login(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsername(username);
-        if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
+        if (userOpt.isPresent() && PasswordUtil.verifyPassword(password, userOpt.get().getPassword())) {
             return userOpt;
         }
         return Optional.empty();
