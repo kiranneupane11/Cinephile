@@ -16,7 +16,7 @@ import jakarta.persistence.*;
 @Table(name = "user_playlist", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "name"}))
 public class MovieList extends BaseEntity {
     
-    @Column(name = "List_Name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String listName;
     
     @Column(name = "user_id")

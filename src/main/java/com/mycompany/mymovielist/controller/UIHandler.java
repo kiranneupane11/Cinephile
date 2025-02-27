@@ -26,19 +26,19 @@ public class UIHandler {
         this.movieListRepository = new DBMovieListRepository(entityManager);
     }
     
-    public Optional<User> login(String username, String password) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
-        if (userOpt.isPresent() && PasswordUtil.verifyPassword(password, userOpt.get().getPassword())) {
+    public Optional<User> login(User user) {
+        Optional<User> userOpt = userRepository.findByUsername(user.getUsername());
+        if (userOpt.isPresent() && PasswordUtil.verifyPassword(user.getPassword(), userOpt.get().getPassword())) {
             return userOpt;
         }
         return Optional.empty();
     }
     
-    public Optional<User> signup(String username, String email, String password) {
-        if (userRepository.findByUsername(username).isPresent() || userRepository.findByEmail(email).isPresent()) {
+    public Optional<User> signup(User user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent() || userRepository.findByEmail(user.getEmail()).isPresent()) {
             return Optional.empty(); 
         }
-        User newUser = new User(username, email, password);
+        User newUser = new User(user.getUsername(), user.getEmail(), user.getPassword());
         userRepository.add(newUser.getId(), newUser);
         return Optional.of(newUser);
     }
@@ -47,11 +47,13 @@ public class UIHandler {
         return movieRepository.getAll();
     }
 
-    public boolean addMovieToList(User user, long movieId, double rating, UserMovie.Status status) {
-        Optional<Movie> movieOpt = movieRepository.get(movieId);
+    public boolean addMovieToList(User user, UserMovie usermovie) {
+        Optional<Movie> movieOpt = movieRepository.get(usermovie.getMovieID());
         if (movieOpt.isEmpty()) return false;
         
-        String listName = status.name();
+       //*** ASK TO ADD MOVIE TO STATUS LIST OR CUSTOM LIST ***
+       
+        String listName = usermovie.getStatus().name();
         MovieList createdList = user.createOrGetMovieList(listName);
         movieListRepository.add(createdList.getId(), createdList);
 
@@ -63,7 +65,7 @@ public class UIHandler {
     }
     
     public List<MovieList> getUserLists(User user) {
-        return movieListRepository.findByUser(user);
+        return movieListRepository.getListByUserId(user.getId());
     }
 
     public Optional<MovieList> getMovieList(long listId) {

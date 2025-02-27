@@ -45,13 +45,12 @@ public class ViewMovieListsCommand implements Command {
         
         // Display details for each movie in the selected list
         for (UserMovie userMovie : movies) {
-            Movie movie = userMovie.getMovie();
-            io.displayMessage("ID: " + movie.getId() +
-                              " | Title: " + movie.getMovieTitle() +
-                              " | Genre: " + movie.getGenre() +
+            io.displayMessage("ID: " + userMovie.getId() +
+//                              " | Title: " + movie.getMovieTitle() +
+//                              " | Genre: " + movie.getGenre() +
                               " | Rating: " + userMovie.getRating() +
-                              " | Status: " + userMovie.getStatus() +
-                              " | Description: " + movie.getDescription());
+                              " | Status: " + userMovie.getStatus()); 
+//                             + " | Description: " + movie.getDescription());
         }
     }
 }

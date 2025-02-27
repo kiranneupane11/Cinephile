@@ -11,7 +11,6 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "movie")
-@AttributeOverride(name = "id", column = @Column(name = "movieID"))
 public class Movie extends BaseEntity{
 
     @Column(name = "Title", nullable = false, length = 75)

@@ -16,10 +16,11 @@ public class DBUserMovieRepository extends DatabaseRepository<UserMovie, Long> {
         super(UserMovie.class, entityManager);
     }
     
-    public List<UserMovie> findByListID(Long userId){
-        return entityManager.createQuery(
-        "SELECT um FROM UserMovie um WHERE um.userId = :userId", UserMovie.class)
-                .setParameter("userId", userId)
-                .getResultList();
+    public List<Object[]> getUserRatedMovies(UserMovie usermovie){
+    return entityManager.createQuery(
+        "SELECT um,m FROM UserMovie um JOIN Movie m ON um.movieId = m.id WHERE um.userId = :userId", 
+        Object[].class)
+        .setParameter("userId", usermovie.getUserID())
+        .getResultList();
     }
 }

@@ -16,7 +16,6 @@ import com.mycompany.mymovielist.util.PasswordUtil;
 
 @Entity
 @Table(name = "user")
-@AttributeOverride(name = "id", column = @Column(name = "userID"))
 public class User extends BaseEntity {
     
     @Column(unique = true, nullable = false)
@@ -27,9 +26,6 @@ public class User extends BaseEntity {
     
     @Column(nullable = false)
     protected String password;
-        
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<MovieList> movieLists = new ArrayList<>();
 
     public User() {} 
     
@@ -61,20 +57,5 @@ public class User extends BaseEntity {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public List<MovieList> getMovieLists() {
-    return movieLists;
-}  
-    
-    public MovieList createOrGetMovieList(String listName) {
-    return movieLists.stream()
-                     .filter(list -> list.getListName().equalsIgnoreCase(listName))
-                     .findFirst()
-                     .orElseGet(() -> {
-                         MovieList newList = new MovieList(listName, this);
-                         movieLists.add(newList);
-                         return newList;
-                     });
     }
 }

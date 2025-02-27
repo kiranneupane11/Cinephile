@@ -44,6 +44,9 @@ public class AddMovieToListCommand implements Command{
         int statusChoice = io.readInt("Enter choice: ");
         UserMovie.Status status = statuses[statusChoice - 1];
         
+               //*** ASK TO ADD MOVIE TO STATUS LIST OR CUSTOM LIST ***
+
+        
         if (uiHandler.addMovieToList(loggedInUser, movieId, rating, status)) {
             io.displayMessage("Movie added successfully!");
         } else {
