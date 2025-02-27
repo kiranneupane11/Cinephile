@@ -17,13 +17,15 @@ public class DBUserPlaylistMoviesRepository extends DatabaseRepository<UserPlayl
         super(UserPlaylistMovies.class, entityManager);
     }
     
-    public List<Object[]> getMoviesFromPlaylist(UserPlaylistMovies userPlaylistMovies) {
-        return entityManager.createQuery(
-            "SELECT upm, m FROM UserPlaylistMovies upm JOIN MovieList ml ON upm.userPlaylistId = ml.id"+
-            "JOIN UserMovie um ON upm.movieId = um.movieId AND ml.userId = um.userId"+
-            "JOIN Movie m ON um.movieId = m.id WHERE ml.id = :playlistId",
-            Object[].class)
-            .setParameter("playlistId", userPlaylistMovies.getUserPlaylistId())
-            .getResultList();
-    }
+    public List<Object[]> getMoviesFromPlaylist(Long playlistId, Long userId) {
+    return entityManager.createQuery(
+        "SELECT um, m FROM UserPlaylistMovies upm " + 
+        "JOIN MovieList ml ON upm.userPlaylistId = ml.id " + 
+        "JOIN UserMovie um ON upm.movieId = um.movieId " + 
+        "JOIN Movie m ON um.movieId = m.id " +
+        "WHERE ml.id = :playlistId AND ml.userId = :userId", Object[].class)
+        .setParameter("playlistId", playlistId)
+        .setParameter("userId", userId)
+        .getResultList();
+}
 } 

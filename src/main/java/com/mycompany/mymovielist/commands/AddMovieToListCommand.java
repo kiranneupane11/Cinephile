@@ -31,7 +31,7 @@ public class AddMovieToListCommand implements Command{
             return;
         }
         for (Movie movie : movies) {
-            io.displayMessage(movie.getId() + ". " + movie.getMovieTitle());
+            io.displayMessage(movie.getId() + ". " + movie.getTitle());
         }
         long movieId = io.readLong("Enter movie ID: ");
         double rating = Double.parseDouble(io.readString("Enter your rating: "));
@@ -44,10 +44,11 @@ public class AddMovieToListCommand implements Command{
         int statusChoice = io.readInt("Enter choice: ");
         UserMovie.Status status = statuses[statusChoice - 1];
         
-               //*** ASK TO ADD MOVIE TO STATUS LIST OR CUSTOM LIST ***
-
+        UserMovie userMovie = new UserMovie(movieId,rating, status, loggedInUser.getId());
+        String listName = io.readString("Enter List Name to add the movie");
+        MovieList newMovieList = new MovieList(listName, loggedInUser.getId());
         
-        if (uiHandler.addMovieToList(loggedInUser, movieId, rating, status)) {
+        if (uiHandler.addMovieToList(loggedInUser, userMovie, newMovieList)) {
             io.displayMessage("Movie added successfully!");
         } else {
             io.displayMessage("Invalid movie ID.");

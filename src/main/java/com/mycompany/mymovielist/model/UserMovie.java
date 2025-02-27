@@ -66,4 +66,12 @@ public class UserMovie extends BaseEntity{
     public Status getStatus() {
         return status;
     }
+    
+    public long getUserID(){
+        return userId;
+    }
+    
+    public long getMovieID(){
+        return movieId;
+    }
 }

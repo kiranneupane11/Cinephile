@@ -18,10 +18,19 @@ public class DBMovieListRepository extends DatabaseRepository<MovieList, Long> {
         super(MovieList.class, entityManager);
     }
     
-    public List<MovieList> getListByUserId(Long userId) {
-    return entityManager.createQuery(
-            "SELECT m FROM MovieList m WHERE m.userId = :userId", MovieList.class)
-            .setParameter("userId", userId)
+    public List<MovieList> getListsByUserId(User user){
+        return entityManager.createQuery("SELECT ml FROM MovieList ml WHERE ml.userId = :userId", MovieList.class)
+            .setParameter("userId", user.getId())
             .getResultList();
+    }
+    
+    public Optional<MovieList> findByUserIdAndListName(MovieList movieList) {
+    return entityManager.createQuery(
+        "SELECT ml FROM MovieList ml WHERE ml.userId = :userId AND ml.listName = :listName",
+        MovieList.class)
+        .setParameter("userId", movieList.getUserID())
+        .setParameter("listName", movieList.getListName())
+        .getResultStream()
+        .findFirst();
     }
 }

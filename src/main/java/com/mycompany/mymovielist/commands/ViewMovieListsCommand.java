@@ -36,21 +36,23 @@ public class ViewMovieListsCommand implements Command {
         }
         
         // Prompt for a list ID to view its movies
-        long listID = io.readLong("Enter List ID to view it: ");
-        List<UserMovie> movies = uiHandler.getMoviesInList(listID);
+        long playlistId = io.readLong("Enter List ID to view it: ");
+        List<UserMovieDTO> movies = uiHandler.getMoviesInList(playlistId, loggedInUser.getId());
+        
         if (movies.isEmpty()) {
             io.displayMessage("No movies found in this list.");
             return;
         }
         
         // Display details for each movie in the selected list
-        for (UserMovie userMovie : movies) {
-            io.displayMessage("ID: " + userMovie.getId() +
-//                              " | Title: " + movie.getMovieTitle() +
-//                              " | Genre: " + movie.getGenre() +
-                              " | Rating: " + userMovie.getRating() +
-                              " | Status: " + userMovie.getStatus()); 
-//                             + " | Description: " + movie.getDescription());
+        for (UserMovieDTO movie : movies) {
+            io.displayMessage("ID: " + movie.getMovieID() +
+                          " | Title: " + movie.getTitle() +
+                          " | Year: " + movie.getReleaseYear() +
+                          " | Genre: " + movie.getGenre() +
+                          " | Rating: " + movie.getRating() +
+                          " | Status: " + movie.getStatus()+
+                          " | Description: " + movie.getDescription());
         }
     }
 }

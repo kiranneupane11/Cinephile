@@ -73,9 +73,11 @@ public class NewUI {
         String email = io.readString("Enter Email address");
         String password = io.readString("Enter password");
         
-        uiHandler.signup(username, email, password)
+        User newUser = new User(username, email, password);
+        
+        uiHandler.signup(newUser)
                 .ifPresentOrElse(
-                        user -> io.displayMessage("Sign up successful! Welcome, " + username + "!"),
+                        user -> io.displayMessage("Sign up successful! Welcome, " + newUser.getUsername() + "!"),
                         () -> io.displayMessage("Error: Username or email already exists.")
                 );
         start();

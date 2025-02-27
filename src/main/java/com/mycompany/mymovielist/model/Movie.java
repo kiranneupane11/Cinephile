@@ -4,6 +4,7 @@ import java.time.Year;
 import jakarta.persistence.*;
 
 
+
 /**
  *
  * @author kiran
@@ -51,7 +52,7 @@ public class Movie extends BaseEntity{
     }
     
     
-    public String getMovieTitle() {
+    public String getTitle() {
         return title;
     }
 

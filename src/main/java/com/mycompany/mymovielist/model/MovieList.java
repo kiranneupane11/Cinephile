@@ -37,20 +37,8 @@ public class MovieList extends BaseEntity {
     public void setListName(String listName) {
         this.listName = listName;
     }
-    
-    public List<MovieList> getMovieLists() {
-    return movieLists;
-    }  
-    
-    public MovieList createOrGetMovieList(String listName) {
-    return movieLists.stream()
-                     .filter(list -> list.getListName().equalsIgnoreCase(listName))
-                     .findFirst()
-                     .orElseGet(() -> {
-                         MovieList newList = new MovieList(listName);
-                         movieLists.add(newList);
-                         return newList;
-                     });
+   
+    public long getUserID(){
+        return userId;
     }
-
 }
