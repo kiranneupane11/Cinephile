@@ -57,14 +57,15 @@ public class NewUI {
     
     private void login(){
         String username = io.readString("Enter your username");
-        String password = io.readString("Enter password");
+        String password = io.readPassword("Enter password");
         
         uiHandler.login(username, password)
          .ifPresentOrElse(
              user -> {
                  loggedInUser = user;
              },
-             () -> io.displayMessage("Invalid Username or Password")
+             () -> io.displayMessage("Invalid Username or Password! Try Again.")
+                 
          );
     }
     

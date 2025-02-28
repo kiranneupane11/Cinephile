@@ -30,7 +30,7 @@ public class UIHandler {
     
     public Optional<User> login(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsername(username);
-        if (userOpt.isPresent() && PasswordUtil.verifyPassword(password, userOpt.get().getPassword())) {
+        if (userOpt.isPresent() && userOpt.get().checkPassword(password)) {
             return userOpt;
         }
         return Optional.empty();
@@ -40,9 +40,8 @@ public class UIHandler {
         if (userRepository.findByUsername(user.getUsername()).isPresent() || userRepository.findByEmail(user.getEmail()).isPresent()) {
             return Optional.empty(); 
         }
-        User newUser = new User(user.getUsername(), user.getEmail(), user.getPassword());
-        userRepository.add(newUser.getId(), newUser);
-        return Optional.of(newUser);
+        userRepository.add(user.getId(), user);
+        return Optional.of(user);
     }
     
     public List<Movie> getAvailableMovies() {
@@ -52,9 +51,7 @@ public class UIHandler {
     public boolean addMovieToList(User user, UserMovie userMovie, MovieList movieList) {
         Optional<Movie> movieOpt = movieRepository.get(userMovie.getMovieID());
         if (movieOpt.isEmpty()) return false;
-        
-       //*** ASK TO ADD MOVIE TO STATUS LIST OR CUSTOM LIST ***
-       
+               
         Optional<MovieList> existingListOpt = movieListRepository.findByUserIdAndListName(movieList);
         
             if (existingListOpt.isPresent()) {

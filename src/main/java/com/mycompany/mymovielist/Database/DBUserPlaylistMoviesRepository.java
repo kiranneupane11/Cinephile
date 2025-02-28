@@ -21,7 +21,7 @@ public class DBUserPlaylistMoviesRepository extends DatabaseRepository<UserPlayl
     return entityManager.createQuery(
         "SELECT um, m FROM UserPlaylistMovies upm " + 
         "JOIN MovieList ml ON upm.userPlaylistId = ml.id " + 
-        "JOIN UserMovie um ON upm.movieId = um.movieId " + 
+        "JOIN UserMovie um ON upm.movieId = um.movieId AND um.userId = :userId " + 
         "JOIN Movie m ON um.movieId = m.id " +
         "WHERE ml.id = :playlistId AND ml.userId = :userId", Object[].class)
         .setParameter("playlistId", playlistId)

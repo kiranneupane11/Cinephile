@@ -4,6 +4,10 @@
  */
 package com.mycompany.mymovielist.view;
 import java.util.Scanner;
+import java.io.Console;
+import javax.swing.*;
+
+
 
 
 /**
@@ -37,8 +41,22 @@ public class ConsoleIO {
     public long readLong(String prompt) {
         displayMessage(prompt);
         long num = scanner.nextLong();
-        scanner.nextLine(); // consume newline
+        scanner.nextLine();
         return num;
+    }
+    
+    public String readPassword(String prompt){
+        JPasswordField passwordField = new JPasswordField();
+        int option = JOptionPane.showConfirmDialog(null, passwordField, "Enter Password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (option == JOptionPane.OK_OPTION) {
+            String password = new String(passwordField.getPassword());
+            System.out.println("Password Entered: " + "*".repeat(password.length())); // Masked output
+            return password;
+        } else {
+            System.out.println("Login Canceled");
+            return null;
+        }
     }
     
 }
