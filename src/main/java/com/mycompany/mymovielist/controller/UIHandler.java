@@ -30,7 +30,7 @@ public class UIHandler {
     
     public Optional<User> login(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsername(username);
-        if (userOpt.isPresent() && userOpt.get().checkPassword(password)) {
+        if (userOpt.isPresent() && PasswordUtil.verifyPassword(password, userOpt.get().getPassword())) {
             return userOpt;
         }
         return Optional.empty();
@@ -83,5 +83,5 @@ public class UIHandler {
             movies.add(new UserMovieDTO(movie, userMovie));
     }
     return movies;
-}
+    }
 }

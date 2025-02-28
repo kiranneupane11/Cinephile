@@ -6,7 +6,7 @@ package com.mycompany.mymovielist.model;
 
 import java.util.*;
 import jakarta.persistence.*;
-import com.mycompany.mymovielist.util.PasswordUtil;
+import com.mycompany.mymovielist.util.*;
 
 
 /**
@@ -39,8 +39,8 @@ public class User extends BaseEntity {
         return username;
     }
     
-    public boolean checkPassword(String rawPassword) {
-        return PasswordUtil.verifyPassword(rawPassword, this.password);
+    public boolean checkPassword(String rawPassword, PasswordService passwordService) {
+        return passwordService.verifyPassword(rawPassword, this.password);
     }
     
     public String getEmail() {

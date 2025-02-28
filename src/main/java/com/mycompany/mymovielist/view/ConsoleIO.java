@@ -4,7 +4,6 @@
  */
 package com.mycompany.mymovielist.view;
 import java.util.Scanner;
-import java.io.Console;
 import javax.swing.*;
 
 
@@ -51,7 +50,7 @@ public class ConsoleIO {
 
         if (option == JOptionPane.OK_OPTION) {
             String password = new String(passwordField.getPassword());
-            System.out.println("Password Entered: " + "*".repeat(password.length())); // Masked output
+            System.out.println("Password Entered: " + "*".repeat(password.length())); 
             return password;
         } else {
             System.out.println("Login Canceled");
