@@ -14,19 +14,19 @@ import jakarta.persistence.*;
 @Table(name = "movie")
 public class Movie extends BaseEntity{
 
-    @Column(name = "Title", nullable = false, length = 75)
+    @Column(name = "title", nullable = false, length = 75)
     private String title;
 
-    @Column(name = "Release_Year", nullable = false)
+    @Column(name = "release_year", nullable = false)
     private Year releaseYear;
 
-    @Column(name = "Genre", nullable = false, length = 75)
+    @Column(name = "genre", nullable = false, length = 75)
     private String genre;
 
-    @Column(name = "Rating", nullable = false)
+    @Column(name = "rating", nullable = false)
     private double rating;
 
-    @Column(name = "Description", columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     public Movie() {

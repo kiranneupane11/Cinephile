@@ -13,21 +13,21 @@ import jakarta.persistence.EntityManager;
 import java.util.*;
 
 
-public class DBMovieListRepository extends DatabaseRepository<MovieList, Long> {
-    public DBMovieListRepository(EntityManager entityManager) {
-        super(MovieList.class, entityManager);
+public class UserPlaylistRepository extends DatabaseRepository<UserPlaylist, Long> {
+    public UserPlaylistRepository(EntityManager entityManager) {
+        super(UserPlaylist.class, entityManager);
     }
     
-    public List<MovieList> getListsByUserId(User user){
-        return entityManager.createQuery("SELECT ml FROM MovieList ml WHERE ml.userId = :userId", MovieList.class)
-            .setParameter("userId", user.getId())
+    public List<UserPlaylist> getListsByUserId(User user){
+        return entityManager.createQuery("SELECT ml FROM UserPlaylist ml WHERE ml.userId = :user", UserPlaylist.class)
+            .setParameter("user", user)
             .getResultList();
     }
     
-    public Optional<MovieList> findByUserIdAndListName(MovieList movieList) {
+    public Optional<UserPlaylist> findByUserIdAndListName(UserPlaylist movieList) {
     return entityManager.createQuery(
-        "SELECT ml FROM MovieList ml WHERE ml.userId = :userId AND ml.listName = :listName",
-        MovieList.class)
+        "SELECT ml FROM UserPlaylist ml WHERE ml.userId = :userId AND ml.listName = :listName",
+        UserPlaylist.class)
         .setParameter("userId", movieList.getUserID())
         .setParameter("listName", movieList.getListName())
         .getResultStream()

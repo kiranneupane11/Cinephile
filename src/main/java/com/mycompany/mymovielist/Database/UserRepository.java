@@ -13,8 +13,8 @@ import jakarta.persistence.EntityManager;
  *
  * @author kiran
  */
-public class DBUserRepository extends DatabaseRepository<User, Long> {
-    public DBUserRepository(EntityManager entityManager) {
+public class UserRepository extends DatabaseRepository<User, Long> {
+    public UserRepository(EntityManager entityManager) {
         super(User.class, entityManager);
     }
     

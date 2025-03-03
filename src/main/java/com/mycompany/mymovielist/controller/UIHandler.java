@@ -14,18 +14,20 @@ import java.util.*;
  * @author kiran
  */
 public class UIHandler {
-    private final DBUserRepository userRepository;
-    private final DBMovieRepository movieRepository;
-    private final DBUserMovieRepository userMovieRepository;
-    private final DBMovieListRepository movieListRepository;
-    private final DBUserPlaylistMoviesRepository userPlayListMoviesRepository;
+    private final UserRepository userRepository;
+    private final MovieRepository movieRepository;
+    private final UserMovieRatingRepository userMovieRepository;
+    private final UserPlaylistRepository userPlaylistRepository;
+    private final UserPlaylistMoviesRepository userPlayListMoviesRepository;
+    private final PasswordService passwordService;
     
-    public UIHandler(EntityManager entityManager) {
-        this.userRepository = new DBUserRepository(entityManager);
-        this.movieRepository = new DBMovieRepository(entityManager);
-        this.userMovieRepository = new DBUserMovieRepository(entityManager);
-        this.movieListRepository = new DBMovieListRepository(entityManager);
-        this.userPlayListMoviesRepository = new DBUserPlaylistMoviesRepository(entityManager);
+    public UIHandler(EntityManager entityManager, PasswordService passwordService) {
+        this.userRepository = new UserRepository(entityManager);
+        this.movieRepository = new MovieRepository(entityManager);
+        this.userMovieRepository = new UserMovieRatingRepository(entityManager);
+        this.userPlaylistRepository = new UserPlaylistRepository(entityManager);
+        this.userPlayListMoviesRepository = new UserPlaylistMoviesRepository(entityManager);
+        this.passwordService = new BasicPasswordService();
     }
     
     public Optional<User> login(String usernameOrEmail, String password) {
@@ -33,7 +35,7 @@ public class UIHandler {
         if (userOpt.isEmpty()) {
             userOpt = userRepository.findByEmail(usernameOrEmail);
         }
-        if (userOpt.isPresent() && PasswordUtil.verifyPassword(password, userOpt.get().getPassword())) {
+        if (userOpt.isPresent() && passwordService.verifyPassword(password, userOpt.get().getPassword())) {
             return userOpt;
         }
         return Optional.empty();
@@ -51,40 +53,43 @@ public class UIHandler {
         return movieRepository.getAll();
     }
 
-    public boolean addMovieToList(User user, UserMovie userMovie, MovieList movieList) {
-        Optional<Movie> movieOpt = movieRepository.get(userMovie.getMovieID());
+    public boolean addMovieToList(User user, UserMovieRating userMovieRating, UserPlaylist userPlaylist) {
+        Optional<Movie> movieOpt = movieRepository.get(userMovieRating.getMovieID().getId());
         if (movieOpt.isEmpty()) return false;
                
-        Optional<MovieList> existingListOpt = movieListRepository.findByUserIdAndListName(movieList);
+        Optional<UserPlaylist> existingListOpt = userPlaylistRepository.findByUserIdAndListName(userPlaylist);
         
             if (existingListOpt.isPresent()) {
-             movieList = existingListOpt.get();
+             userPlaylist = existingListOpt.get();
             } else {
-            // Create new list if not found
-             movieList = new MovieList(movieList.getListName(), user.getId());
-            movieListRepository.add(movieList.getId(), movieList);
+            userPlaylist = new UserPlaylist(userPlaylist.getListName(), userPlaylist.getUserID());
+            userPlaylistRepository.add(userPlaylist.getId(), userPlaylist);
             }
             
-        UserPlaylistMovies userPlaylistMovie = new UserPlaylistMovies(movieList.getId(), userMovie.getMovieID());
+        UserPlaylistMovies userPlaylistMovie = new UserPlaylistMovies(userPlaylist, userMovieRating.getMovieID());
         userPlayListMoviesRepository.add(userPlaylistMovie.getId(), userPlaylistMovie);
-        userMovieRepository.add(userMovie.getId(), userMovie);
+        userMovieRepository.add(userMovieRating.getId(), userMovieRating);
 
         return true;
     }
     
-    public List<MovieList> getUserLists(User user) {
-        return movieListRepository.getListsByUserId(user);
+    public List<UserPlaylist> getUserLists(User user) {
+        return userPlaylistRepository.getListsByUserId(user);
     }
 
-    public List<UserMovieDTO> getMoviesInList(Long playlistId, Long userId) {
+    public List<UserMovieRatingDTO> getMoviesInList(Long playlistId, Long userId) {
         List<Object[]> results = userPlayListMoviesRepository.getMoviesFromPlaylist(playlistId, userId);
 
-        List<UserMovieDTO> movies = new ArrayList<>();
+        List<UserMovieRatingDTO> movies = new ArrayList<>();
         for (Object[] row : results) {
-            UserMovie userMovie = (UserMovie) row[0];
+            UserMovieRating userMovie = (UserMovieRating) row[0];
             Movie movie = (Movie) row[1];
-            movies.add(new UserMovieDTO(movie, userMovie));
+            movies.add(new UserMovieRatingDTO(movie, userMovie));
     }
     return movies;
+    }
+    
+    public Optional<Movie> getMovieById(long Id){
+        return movieRepository.get(Id);
     }
 }

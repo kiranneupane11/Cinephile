@@ -13,7 +13,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "user_movie_rating")
-public class UserMovie extends BaseEntity{
+public class UserMovieRating extends BaseEntity{
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
@@ -21,12 +21,14 @@ public class UserMovie extends BaseEntity{
 
     @Column(nullable = true)
     private double rating;
-
-    @Column(name = "user_id")
-    private Long userId;
     
-    @Column(name = "movie_id", nullable = false)
-    private Long movieId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User userId;
+    
+    @ManyToOne
+    @JoinColumn(name = "movie_id", nullable = false)
+    private Movie movieId;
     
     public enum Status {
         Watched,
@@ -35,10 +37,10 @@ public class UserMovie extends BaseEntity{
         Dropped
     }
     
-    public UserMovie() {
+    public UserMovieRating() {
     }
     
-    public UserMovie(Long movieId, double rating, Status status, Long userId){
+    public UserMovieRating(Movie movieId, double rating, Status status, User userId){
         this.movieId = movieId;
         this.userId = userId;
         setStatus(status);
@@ -67,11 +69,11 @@ public class UserMovie extends BaseEntity{
         return status;
     }
     
-    public long getUserID(){
+    public User getUserID(){
         return userId;
     }
     
-    public long getMovieID(){
+    public Movie getMovieID(){
         return movieId;
     }
 }

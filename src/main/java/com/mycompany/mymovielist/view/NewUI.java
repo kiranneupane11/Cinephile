@@ -5,6 +5,7 @@
 package com.mycompany.mymovielist.view;
 import com.mycompany.mymovielist.commands.*;
 import com.mycompany.mymovielist.model.*;
+import com.mycompany.mymovielist.util.*;
 import com.mycompany.mymovielist.controller.*;
 import jakarta.persistence.*;
 
@@ -22,12 +23,13 @@ public class NewUI {
     private User loggedInUser;
     private EntityManagerFactory emf;
     private EntityManager em;
+    private PasswordService ps;
     
     public NewUI(){
         this.io = new ConsoleIO();
         this.emf = Persistence.createEntityManagerFactory("MovieListPU");
         this.em = emf.createEntityManager();
-        this.uiHandler = new UIHandler(em);
+        this.uiHandler = new UIHandler(em,ps);
     }
     
     public void start(){
@@ -56,8 +58,8 @@ public class NewUI {
     }
     
     private void login(){
-        String username = io.readString("Enter your username");
-        String password = io.readPassword("Enter password");
+        String username = io.readString("Enter Username or E-mail");
+        String password = io.readPassword("Enter Password");
         
         uiHandler.login(username, password)
          .ifPresentOrElse(
@@ -65,7 +67,7 @@ public class NewUI {
                  loggedInUser = user;
                  io.displayMessage("Welcome, " + user.getUsername() + "!");
              },
-             () -> io.displayMessage("Invalid Username or Password! Try Again.")
+             () -> io.displayMessage("Invalid Username/E-mail or Password! Try Again.")
                  
          );
     }

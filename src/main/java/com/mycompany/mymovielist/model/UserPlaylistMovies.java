@@ -14,24 +14,26 @@ import jakarta.persistence.*;
 @Table(name = "user_playlist_movies", uniqueConstraints = @UniqueConstraint(columnNames = {"list_id", "movie_id"}))
 public class UserPlaylistMovies extends BaseEntity {
     
-    @Column(name = "user_playlist_id", nullable = false)
-    private Long userPlaylistId;
+    @ManyToOne
+    @JoinColumn(name = "user_playlist_id", nullable = false)
+    private UserPlaylist userPlaylistId;
     
-    @Column(name = "movie_id", nullable = false)
-    private Long movieId;
+    @ManyToOne
+    @JoinColumn(name = "movie_id", nullable = false)
+    private Movie movieId;
     
     public UserPlaylistMovies() {}
     
-    public UserPlaylistMovies(Long listId, Long movieId) {
-        this.userPlaylistId = listId;
+    public UserPlaylistMovies(UserPlaylist userPlaylistId, Movie movieId) {
+        this.userPlaylistId = userPlaylistId;
         this.movieId = movieId;
     }
     
-    public long getUserPlaylistId(){
+    public UserPlaylist getUserPlaylistId(){
         return userPlaylistId;
     }
     
-    public long getMovieId(){
+    public Movie getMovieId(){
         return movieId;
     }
    

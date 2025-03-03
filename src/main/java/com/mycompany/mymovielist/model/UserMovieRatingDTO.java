@@ -10,17 +10,17 @@ import java.time.Year;
  *
  * @author kiran
  */
-public class UserMovieDTO {
+public class UserMovieRatingDTO {
     private String title;
     private String genre;
     private double rating;
-    private UserMovie.Status status;
+    private UserMovieRating.Status status;
     private Long movieID;
     private Year releaseYear;
     private String description;
     
 
-    public UserMovieDTO(Movie movie, UserMovie userMovie) {
+    public UserMovieRatingDTO(Movie movie, UserMovieRating userMovie) {
         this.movieID = movie.getId();
         this.title = movie.getTitle();
         this.releaseYear = movie.getReleaseYear();
@@ -34,7 +34,7 @@ public class UserMovieDTO {
     public String getTitle() { return title; }
     public String getGenre() { return genre; }
     public double getRating() { return rating; }
-    public UserMovie.Status getStatus() { return status; }
+    public UserMovieRating.Status getStatus() { return status; }
     public Year getReleaseYear() {return releaseYear; }
     public String getDescription(){return description; }
 }

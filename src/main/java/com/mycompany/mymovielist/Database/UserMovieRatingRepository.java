@@ -11,14 +11,14 @@ import java.util.*;
  *
  * @author kiran
  */
-public class DBUserMovieRepository extends DatabaseRepository<UserMovie, Long> {
-    public DBUserMovieRepository(EntityManager entityManager) {
-        super(UserMovie.class, entityManager);
+public class UserMovieRatingRepository extends DatabaseRepository<UserMovieRating, Long> {
+    public UserMovieRatingRepository(EntityManager entityManager) {
+        super(UserMovieRating.class, entityManager);
     }
     
-    public List<Object[]> getUserRatedMovies(UserMovie usermovie){
+    public List<Object[]> getUserRatedMovies(UserMovieRating usermovie){
     return entityManager.createQuery(
-        "SELECT um,m FROM UserMovie um JOIN Movie m ON um.movieId = m.id WHERE um.userId = :userId", 
+        "SELECT um,m FROM UserMovieRating um JOIN Movie m ON um.movieId = m.id WHERE um.userId = :userId", 
         Object[].class)
         .setParameter("userId", usermovie.getUserID())
         .getResultList();

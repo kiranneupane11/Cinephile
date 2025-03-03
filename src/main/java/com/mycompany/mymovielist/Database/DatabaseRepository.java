@@ -35,22 +35,20 @@ public abstract class DatabaseRepository<T, ID> extends AbstractRepository<T, ID
 
     @Override
     public void remove(ID id) {
-        entityManager.getTransaction().begin(); // Start a transaction
-        get(id).ifPresent(entity -> entityManager.remove(entity)); // Remove the entity
-        entityManager.getTransaction().commit(); // Commit the transaction
+        entityManager.getTransaction().begin(); 
+        get(id).ifPresent(entity -> entityManager.remove(entity)); 
+        entityManager.getTransaction().commit(); 
     }
 
-    // Getting an entity by its ID from the database
     @Override
     public Optional<T> get(ID id) {
-        return Optional.ofNullable(entityManager.find(entityType, id)); // Find the entity
+        return Optional.ofNullable(entityManager.find(entityType, id)); 
     }
 
-    // Getting all entities from the database
     @Override
     public List<T> getAll() {
         return entityManager.createQuery("SELECT e FROM " + entityType.getSimpleName() + " e", entityType)
-                .getResultList(); // Retrieve all entities
+                .getResultList();
     }
 }
 

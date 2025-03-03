@@ -25,27 +25,24 @@ public class ViewMovieListsCommand implements Command {
     
     @Override
     public void execute() {
-        // Display available movie lists
-        List<MovieList> lists = uiHandler.getUserLists(loggedInUser);
+        List<UserPlaylist> lists = uiHandler.getUserLists(loggedInUser);
         if (lists.isEmpty()) {
             io.displayMessage("No movie lists found.");
             return;
         }
-        for (MovieList list : lists) {
+        for (UserPlaylist list : lists) {
             io.displayMessage(list.getId() + ". " + list.getListName());
         }
         
-        // Prompt for a list ID to view its movies
         long playlistId = io.readLong("Enter List ID to view it: ");
-        List<UserMovieDTO> movies = uiHandler.getMoviesInList(playlistId, loggedInUser.getId());
+        List<UserMovieRatingDTO> movies = uiHandler.getMoviesInList(playlistId, loggedInUser.getId());
         
         if (movies.isEmpty()) {
             io.displayMessage("No movies found in this list.");
             return;
         }
         
-        // Display details for each movie in the selected list
-        for (UserMovieDTO movie : movies) {
+        for (UserMovieRatingDTO movie : movies) {
             io.displayMessage("ID: " + movie.getMovieID() +
                           " | Title: " + movie.getTitle() +
                           " | Year: " + movie.getReleaseYear() +

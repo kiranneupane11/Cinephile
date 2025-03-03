@@ -24,7 +24,6 @@ public class AddMovieToListCommand implements Command{
     
     @Override
     public void execute() {
-        // Display available movies
         List<Movie> movies = uiHandler.getAvailableMovies();
         if (movies.isEmpty()) {
             io.displayMessage("No movies available.");
@@ -33,22 +32,28 @@ public class AddMovieToListCommand implements Command{
         for (Movie movie : movies) {
             io.displayMessage(movie.getId() + ". " + movie.getTitle());
         }
-        long movieId = io.readLong("Enter movie ID: ");
+        long Id = io.readLong("Enter movie ID: ");
+        Optional<Movie> movieOpt = uiHandler.getMovieById(Id);
+        
+        if (movieOpt.isEmpty()) {
+            io.displayMessage("Invalid movie ID.");
+            return;
+        }
         double rating = Double.parseDouble(io.readString("Enter your rating: "));
         
         io.displayMessage("Select status:");
-        UserMovie.Status[] statuses = UserMovie.Status.values();
+        UserMovieRating.Status[] statuses = UserMovieRating.Status.values();
         for (int i = 0; i < statuses.length; i++) {
             io.displayMessage((i + 1) + ". " + statuses[i]);
         }
         int statusChoice = io.readInt("Enter choice: ");
-        UserMovie.Status status = statuses[statusChoice - 1];
+        UserMovieRating.Status status = statuses[statusChoice - 1];
         
-        UserMovie userMovie = new UserMovie(movieId,rating, status, loggedInUser.getId());
+        UserMovieRating userMovieRating = new UserMovieRating(movieOpt.get(),rating, status, loggedInUser);
         String listName = io.readString("Enter List Name to add the movie");
-        MovieList newMovieList = new MovieList(listName, loggedInUser.getId());
+        UserPlaylist newMovieList = new UserPlaylist(listName, loggedInUser);
         
-        if (uiHandler.addMovieToList(loggedInUser, userMovie, newMovieList)) {
+        if (uiHandler.addMovieToList(loggedInUser, userMovieRating, newMovieList)) {
             io.displayMessage("Movie added successfully!");
         } else {
             io.displayMessage("Invalid movie ID.");

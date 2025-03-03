@@ -12,16 +12,16 @@ import java.util.*;
  *
  * @author kiran
  */
-public class DBUserPlaylistMoviesRepository extends DatabaseRepository<UserPlaylistMovies, Long> {
-    public DBUserPlaylistMoviesRepository(EntityManager entityManager) {
+public class UserPlaylistMoviesRepository extends DatabaseRepository<UserPlaylistMovies, Long> {
+    public UserPlaylistMoviesRepository(EntityManager entityManager) {
         super(UserPlaylistMovies.class, entityManager);
     }
     
     public List<Object[]> getMoviesFromPlaylist(Long playlistId, Long userId) {
     return entityManager.createQuery(
         "SELECT um, m FROM UserPlaylistMovies upm " + 
-        "JOIN MovieList ml ON upm.userPlaylistId = ml.id " + 
-        "JOIN UserMovie um ON upm.movieId = um.movieId AND um.userId = :userId " + 
+        "JOIN UserPlaylist ml ON upm.userPlaylistId = ml.id " + 
+        "JOIN UserMovieRating um ON upm.movieId = um.movieId AND um.userId = :userId " + 
         "JOIN Movie m ON um.movieId = m.id " +
         "WHERE ml.id = :playlistId AND ml.userId = :userId", Object[].class)
         .setParameter("playlistId", playlistId)
