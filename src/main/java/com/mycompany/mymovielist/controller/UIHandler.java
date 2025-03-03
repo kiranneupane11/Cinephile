@@ -28,8 +28,11 @@ public class UIHandler {
         this.userPlayListMoviesRepository = new DBUserPlaylistMoviesRepository(entityManager);
     }
     
-    public Optional<User> login(String username, String password) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
+    public Optional<User> login(String usernameOrEmail, String password) {
+        Optional<User> userOpt = userRepository.findByUsername(usernameOrEmail);
+        if (userOpt.isEmpty()) {
+            userOpt = userRepository.findByEmail(usernameOrEmail);
+        }
         if (userOpt.isPresent() && PasswordUtil.verifyPassword(password, userOpt.get().getPassword())) {
             return userOpt;
         }

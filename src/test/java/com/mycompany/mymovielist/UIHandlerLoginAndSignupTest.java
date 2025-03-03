@@ -39,6 +39,7 @@ public class UIHandlerLoginAndSignupTest {
 
     @Test
     void testSuccessfulLogin() {
+        setUp();
         String username = "kiran";
         String password = "password123";
         User user = new User(username, "kiran@example.com", password); // This constructor will be bypassed since we re-hash later if needed.

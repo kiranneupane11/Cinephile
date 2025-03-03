@@ -63,6 +63,7 @@ public class NewUI {
          .ifPresentOrElse(
              user -> {
                  loggedInUser = user;
+                 io.displayMessage("Welcome, " + user.getUsername() + "!");
              },
              () -> io.displayMessage("Invalid Username or Password! Try Again.")
                  
