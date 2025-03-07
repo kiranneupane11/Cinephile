@@ -35,7 +35,14 @@ public class ViewMovieListsCommand implements Command {
         }
         
         long playlistId = io.readLong("Enter List ID to view it: ");
-        List<UserMovieRatingDTO> movies = uiHandler.getMoviesInList(playlistId, loggedInUser.getId());
+        
+        Optional<UserPlaylist> playlistOpt = uiHandler.getUserPlaylistById(playlistId, loggedInUser);
+        if (playlistOpt.isEmpty()) {
+            io.displayMessage("Invalid List ID.");
+            return;
+        }
+        UserPlaylist playlist = playlistOpt.get();
+        List<UserMovieRatingDTO> movies = uiHandler.getMoviesInList(playlist, loggedInUser);
         
         if (movies.isEmpty()) {
             io.displayMessage("No movies found in this list.");

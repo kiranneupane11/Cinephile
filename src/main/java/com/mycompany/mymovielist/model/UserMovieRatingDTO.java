@@ -13,7 +13,7 @@ import java.time.Year;
 public class UserMovieRatingDTO {
     private String title;
     private String genre;
-    private double rating;
+    private Double rating;
     private UserMovieRating.Status status;
     private Long movieID;
     private Year releaseYear;
@@ -25,7 +25,7 @@ public class UserMovieRatingDTO {
         this.title = movie.getTitle();
         this.releaseYear = movie.getReleaseYear();
         this.genre = movie.getGenre();
-        this.rating = userMovie.getRating();
+        this.rating = (userMovie != null) ? userMovie.getRating() : null;
         this.status = userMovie.getStatus();
         this.description = movie.getDescription();
     }
@@ -33,7 +33,7 @@ public class UserMovieRatingDTO {
     public Long getMovieID() { return movieID; }
     public String getTitle() { return title; }
     public String getGenre() { return genre; }
-    public double getRating() { return rating; }
+    public String getRating() { return (rating != null) ? String.valueOf(rating) : "Not Rated"; }
     public UserMovieRating.Status getStatus() { return status; }
     public Year getReleaseYear() {return releaseYear; }
     public String getDescription(){return description; }

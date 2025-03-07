@@ -20,15 +20,15 @@ public class UserMovieRating extends BaseEntity{
     private Status status;
 
     @Column(nullable = true)
-    private double rating;
+    private Double rating;
     
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
     
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)
-    private Movie movieId;
+    private Movie movie;
     
     public enum Status {
         Watched,
@@ -40,22 +40,22 @@ public class UserMovieRating extends BaseEntity{
     public UserMovieRating() {
     }
     
-    public UserMovieRating(Movie movieId, double rating, Status status, User userId){
-        this.movieId = movieId;
-        this.userId = userId;
+    public UserMovieRating(Movie movieId, Double rating, Status status, User userId){
+        this.movie = movieId;
+        this.user = userId;
         setStatus(status);
         setRating(rating);
     }          
             
-    public double getRating(){
+    public Double getRating(){
         return rating;
     }
     
-    public void setRating(double rating){
-        if(rating < 1 || rating > 10){
+    public void setRating(Double rating) {
+        if (rating != null && (rating < 1 || rating > 10)) {
             throw new IllegalArgumentException("Rating must be between 1 and 10");
         }
-        this.rating = Math.round(rating * 10) / 10.0 ;
+        this.rating = (rating != null) ? Math.round(rating * 10) / 10.0 : null;
     }
     
      public void setStatus(Status status) {
@@ -70,10 +70,10 @@ public class UserMovieRating extends BaseEntity{
     }
     
     public User getUserID(){
-        return userId;
+        return user;
     }
     
     public Movie getMovieID(){
-        return movieId;
+        return movie;
     }
 }

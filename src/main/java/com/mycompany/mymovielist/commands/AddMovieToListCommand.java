@@ -39,7 +39,16 @@ public class AddMovieToListCommand implements Command{
             io.displayMessage("Invalid movie ID.");
             return;
         }
-        double rating = Double.parseDouble(io.readString("Enter your rating: "));
+        
+        Double rating = null;
+        String ratingInput = io.readString("Enter your rating (or press Enter to skip): ").trim();
+        if (!ratingInput.isEmpty()) {
+            try {
+                rating = Double.parseDouble(ratingInput);
+            } catch (NumberFormatException e) {
+                io.displayMessage("Invalid rating input. Skipping rating.");
+            }
+        }  
         
         io.displayMessage("Select status:");
         UserMovieRating.Status[] statuses = UserMovieRating.Status.values();

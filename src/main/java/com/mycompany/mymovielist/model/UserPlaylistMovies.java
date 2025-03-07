@@ -16,25 +16,25 @@ public class UserPlaylistMovies extends BaseEntity {
     
     @ManyToOne
     @JoinColumn(name = "user_playlist_id", nullable = false)
-    private UserPlaylist userPlaylistId;
+    private UserPlaylist userPlaylist;
     
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)
-    private Movie movieId;
+    private Movie movie;
     
     public UserPlaylistMovies() {}
     
-    public UserPlaylistMovies(UserPlaylist userPlaylistId, Movie movieId) {
-        this.userPlaylistId = userPlaylistId;
-        this.movieId = movieId;
+    public UserPlaylistMovies(UserPlaylist userPlaylist, Movie movie) {
+        this.userPlaylist = userPlaylist;
+        this.movie = movie;
     }
     
     public UserPlaylist getUserPlaylistId(){
-        return userPlaylistId;
+        return userPlaylist;
     }
     
     public Movie getMovieId(){
-        return movieId;
+        return movie;
     }
    
     

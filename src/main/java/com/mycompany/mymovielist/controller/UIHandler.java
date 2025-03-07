@@ -77,19 +77,16 @@ public class UIHandler {
         return userPlaylistRepository.getListsByUserId(user);
     }
 
-    public List<UserMovieRatingDTO> getMoviesInList(Long playlistId, Long userId) {
-        List<Object[]> results = userPlayListMoviesRepository.getMoviesFromPlaylist(playlistId, userId);
-
-        List<UserMovieRatingDTO> movies = new ArrayList<>();
-        for (Object[] row : results) {
-            UserMovieRating userMovie = (UserMovieRating) row[0];
-            Movie movie = (Movie) row[1];
-            movies.add(new UserMovieRatingDTO(movie, userMovie));
-    }
-    return movies;
-    }
+    public List<UserMovieRatingDTO> getMoviesInList(UserPlaylist playlist, User user) {
+    return userPlayListMoviesRepository.getMoviesFromPlaylist(playlist, user);
+}
     
     public Optional<Movie> getMovieById(long Id){
         return movieRepository.get(Id);
     }
+    
+    public Optional<UserPlaylist> getUserPlaylistById(long playlistId, User user) {
+    return userPlaylistRepository.get(playlistId)
+        .filter(playlist -> playlist.getUserID().equals(user)); 
+}
 }
