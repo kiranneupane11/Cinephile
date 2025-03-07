@@ -48,7 +48,6 @@ public class NewUI {
         
         if(loggedInUser != null){
             NavigationManager navManager = new NavigationManager(io);
-            // Register commands for the main menu
             navManager.registerCommand(1, new ViewAvailableMoviesCommand(io, uiHandler));
             navManager.registerCommand(2, new AddMovieToListCommand(io, uiHandler, loggedInUser));
             navManager.registerCommand(3, new ViewMovieListsCommand(io, uiHandler, loggedInUser));

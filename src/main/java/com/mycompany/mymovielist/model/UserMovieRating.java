@@ -52,16 +52,10 @@ public class UserMovieRating extends BaseEntity{
     }
     
     public void setRating(Double rating) {
-        if (rating != null && (rating < 1 || rating > 10)) {
-            throw new IllegalArgumentException("Rating must be between 1 and 10");
-        }
-        this.rating = (rating != null) ? Math.round(rating * 10) / 10.0 : null;
+        this.rating = rating;
     }
     
      public void setStatus(Status status) {
-        if (status == null) {
-            throw new IllegalArgumentException("Status cannot be null.");
-        }
         this.status = status;
     }
     

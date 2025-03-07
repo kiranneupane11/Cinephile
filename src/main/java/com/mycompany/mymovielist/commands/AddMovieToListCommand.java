@@ -41,22 +41,39 @@ public class AddMovieToListCommand implements Command{
         }
         
         Double rating = null;
-        String ratingInput = io.readString("Enter your rating (or press Enter to skip): ").trim();
-        if (!ratingInput.isEmpty()) {
+        while (true) {
+            String ratingInput = io.readString("Enter your rating (1-10) or press Enter to skip: ").trim();
+            if (ratingInput.isEmpty()) {
+                break; 
+            }
             try {
                 rating = Double.parseDouble(ratingInput);
+                if (rating < 1 || rating > 10) {
+                    io.displayMessage("Rating must be between 1 and 10.");
+                    continue;
+                }
+                break;
             } catch (NumberFormatException e) {
-                io.displayMessage("Invalid rating input. Skipping rating.");
+                io.displayMessage("Invalid rating input. Please enter a number between 1 and 10.");
             }
-        }  
-        
+        }
+
         io.displayMessage("Select status:");
         UserMovieRating.Status[] statuses = UserMovieRating.Status.values();
         for (int i = 0; i < statuses.length; i++) {
             io.displayMessage((i + 1) + ". " + statuses[i]);
         }
-        int statusChoice = io.readInt("Enter choice: ");
-        UserMovieRating.Status status = statuses[statusChoice - 1];
+
+        UserMovieRating.Status status = null;
+        while (status == null) {
+            int statusChoice = io.readInt("Enter choice: ");
+            if (statusChoice < 1 || statusChoice > statuses.length) {
+                io.displayMessage("Invalid choice. Please select a valid status.");
+            } else {
+                status = statuses[statusChoice - 1];
+            }
+        }
+
         
         UserMovieRating userMovieRating = new UserMovieRating(movieOpt.get(),rating, status, loggedInUser);
         String listName = io.readString("Enter List Name to add the movie");

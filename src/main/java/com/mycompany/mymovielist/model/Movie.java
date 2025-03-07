@@ -45,9 +45,6 @@ public class Movie extends BaseEntity{
     }
     
     public void setRating(double rating){
-        if(rating < 0 || rating > 10){
-            throw new IllegalArgumentException("Rating must be between 0 and 10");
-        }
         this.rating = Math.round(rating * 10) / 10.0 ;
     }
     
@@ -57,9 +54,6 @@ public class Movie extends BaseEntity{
     }
 
     public void setMovieTitle(String title) {
-        if (title.isEmpty() || title.length() > 75 ){
-            throw new IllegalArgumentException("Title can't be empty or too long.");
-        }
         this.title = title;
     }
 
@@ -68,10 +62,6 @@ public class Movie extends BaseEntity{
     }
 
     public void setReleaseYear(Year releaseYear) {
-         Year currentYear = Year.now();
-        if(releaseYear.isAfter(currentYear)){
-            throw new IllegalArgumentException("Release Year is out of range");
-        }
         this.releaseYear = releaseYear;
     }
 
