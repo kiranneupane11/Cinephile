@@ -58,6 +58,10 @@ public class UserMovieRating extends BaseEntity{
      public void setStatus(Status status) {
         this.status = status;
     }
+     
+     public void setMovieID(Movie movieId){
+         this.movie = movieId;
+     }
     
     public Status getStatus() {
         return status;
