@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.mymovielist.commands;
+package com.mycompany.mymovielist.view.commands;
 import com.mycompany.mymovielist.view.*;
 
 /**
@@ -10,10 +10,10 @@ import com.mycompany.mymovielist.view.*;
  * @author kiran
  */
 public class LogoutCommand implements Command {
-    private final NewUI ui;
+    private final UI ui;
     private final NavigationManager navManager;
     
-    public LogoutCommand(NewUI ui, NavigationManager navManager) {
+    public LogoutCommand(UI ui, NavigationManager navManager) {
         this.ui = ui;
         this.navManager = navManager;
     }

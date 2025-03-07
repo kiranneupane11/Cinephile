@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author kiran
  */
-public abstract class AbstractRepository<T, ID> implements CrudRepository<T, ID> {
+public abstract class AbstractRepository<T, ID> implements BaseRepository<T, ID> {
     protected final Map<ID, T> items = new HashMap<>();
 
     @Override

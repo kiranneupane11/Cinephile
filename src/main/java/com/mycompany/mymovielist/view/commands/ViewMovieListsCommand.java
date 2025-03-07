@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.mymovielist.commands;
+package com.mycompany.mymovielist.view.commands;
 import com.mycompany.mymovielist.view.*;
 import com.mycompany.mymovielist.model.*;
-import com.mycompany.mymovielist.controller.*;
+import com.mycompany.mymovielist.service.PlaylistService;
 import java.util.*;
 
 /**
@@ -14,18 +14,18 @@ import java.util.*;
  */
 public class ViewMovieListsCommand implements Command {
     private final ConsoleIO io;
-    private final UIHandler uiHandler;
+    private final PlaylistService playlistService;
     private final User loggedInUser;
     
-    public ViewMovieListsCommand(ConsoleIO io, UIHandler uiHandler, User loggedInUser) {
+    public ViewMovieListsCommand(ConsoleIO io, PlaylistService playlistService, User loggedInUser) {
         this.io = io;
-        this.uiHandler = uiHandler;
+        this.playlistService = playlistService;
         this.loggedInUser = loggedInUser;
     }
     
     @Override
     public void execute() {
-        List<UserPlaylist> lists = uiHandler.getUserLists(loggedInUser);
+        List<UserPlaylist> lists = playlistService.getUserLists(loggedInUser);
         if (lists.isEmpty()) {
             io.displayMessage("No movie lists found.");
             return;
@@ -36,13 +36,13 @@ public class ViewMovieListsCommand implements Command {
         
         long playlistId = io.readLong("Enter List ID to view it: ");
         
-        Optional<UserPlaylist> playlistOpt = uiHandler.getUserPlaylistById(playlistId, loggedInUser);
+        Optional<UserPlaylist> playlistOpt = playlistService.getUserPlaylistById(playlistId, loggedInUser);
         if (playlistOpt.isEmpty()) {
             io.displayMessage("Invalid List ID.");
             return;
         }
         UserPlaylist playlist = playlistOpt.get();
-        List<UserMovieRatingDTO> movies = uiHandler.getMoviesInList(playlist, loggedInUser);
+        List<UserMovieRatingDTO> movies = playlistService.getMoviesInList(playlist, loggedInUser);
         
         if (movies.isEmpty()) {
             io.displayMessage("No movies found in this list.");

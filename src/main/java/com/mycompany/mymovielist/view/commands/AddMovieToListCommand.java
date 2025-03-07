@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.mymovielist.commands;
+package com.mycompany.mymovielist.view.commands;
 import com.mycompany.mymovielist.view.*;
 import com.mycompany.mymovielist.model.*;
-import com.mycompany.mymovielist.controller.*;
+import com.mycompany.mymovielist.service.*;
 import java.util.*;
 /**
  *
@@ -13,18 +13,20 @@ import java.util.*;
  */
 public class AddMovieToListCommand implements Command{
     private final ConsoleIO io;
-    private final UIHandler uiHandler;
+    private final MovieService movieService;
+    private final PlaylistService playlistService;
     private final User loggedInUser;
     
-    public AddMovieToListCommand(ConsoleIO io, UIHandler uiHandler, User loggedInUser) {
+    public AddMovieToListCommand(ConsoleIO io, MovieService movieService, PlaylistService playlistService, User loggedInUser) {
         this.io = io;
-        this.uiHandler = uiHandler;
+        this.movieService = movieService;
+        this.playlistService = playlistService;
         this.loggedInUser = loggedInUser;
     }
     
     @Override
     public void execute() {
-        List<Movie> movies = uiHandler.getAvailableMovies();
+        List<Movie> movies = movieService.getAvailableMovies();
         if (movies.isEmpty()) {
             io.displayMessage("No movies available.");
             return;
@@ -33,7 +35,7 @@ public class AddMovieToListCommand implements Command{
             io.displayMessage(movie.getId() + ". " + movie.getTitle());
         }
         long Id = io.readLong("Enter movie ID: ");
-        Optional<Movie> movieOpt = uiHandler.getMovieById(Id);
+        Optional<Movie> movieOpt = movieService.getMovieById(Id);
         
         if (movieOpt.isEmpty()) {
             io.displayMessage("Invalid movie ID.");
@@ -73,13 +75,12 @@ public class AddMovieToListCommand implements Command{
                 status = statuses[statusChoice - 1];
             }
         }
-
         
         UserMovieRating userMovieRating = new UserMovieRating(movieOpt.get(),rating, status, loggedInUser);
         String listName = io.readString("Enter List Name to add the movie");
         UserPlaylist newMovieList = new UserPlaylist(listName, loggedInUser);
         
-        if (uiHandler.addMovieToList(loggedInUser, userMovieRating, newMovieList)) {
+        if (playlistService.addMovieToList(loggedInUser, userMovieRating, newMovieList)) {
             io.displayMessage("Movie added successfully!");
         } else {
             io.displayMessage("Invalid movie ID.");

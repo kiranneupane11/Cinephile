@@ -10,7 +10,7 @@ import java.util.*;
  * @author kiran
  */
 
-public interface CrudRepository<T, ID> {
+public interface BaseRepository<T, ID> {
     void add(ID id, T item);
     void remove(ID id);
     Optional<T> get(ID id);

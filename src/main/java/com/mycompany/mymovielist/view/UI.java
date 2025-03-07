@@ -3,10 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.mymovielist.view;
-import com.mycompany.mymovielist.commands.*;
+import com.mycompany.mymovielist.view.commands.*;
 import com.mycompany.mymovielist.model.*;
+import com.mycompany.mymovielist.service.*;
 import com.mycompany.mymovielist.util.*;
-import com.mycompany.mymovielist.controller.*;
+import com.mycompany.mymovielist.repository.*;
 import jakarta.persistence.*;
 
 
@@ -16,77 +17,102 @@ import jakarta.persistence.*;
  *
  * @author kiran
  */
-public class NewUI {
+public class UI {
     
     private final ConsoleIO io;
-    private final UIHandler uiHandler;
-    private User loggedInUser;
-    private EntityManagerFactory emf;
-    private EntityManager em;
-    private PasswordService ps;
     
-    public NewUI(){
+    private final AuthenticationService authenticationService;
+    private final MovieService movieService;
+    private final PlaylistService playlistService;
+
+    private User loggedInUser;
+    private final EntityManagerFactory emf;
+    private final EntityManager em;
+
+    public UI() {
         this.io = new ConsoleIO();
         this.emf = Persistence.createEntityManagerFactory("MovieListPU");
         this.em = emf.createEntityManager();
-        this.uiHandler = new UIHandler(em,ps);
+        
+        UserRepository userRepository = new UserRepository(em);
+        MovieRepository movieRepository = new MovieRepository(em);
+        UserPlaylistRepository userPlaylistRepository = new UserPlaylistRepository(em);
+        UserPlaylistMoviesRepository userPlaylistMoviesRepository = new UserPlaylistMoviesRepository(em);
+        UserMovieRatingRepository userMovieRatingRepository = new UserMovieRatingRepository(em);
+
+        PasswordService passwordService = new BasicPasswordService();
+
+        this.authenticationService = new AuthenticationService(userRepository, passwordService);
+        this.movieService = new MovieService(movieRepository);
+        this.playlistService = new PlaylistService(
+                userPlaylistRepository,
+                userPlaylistMoviesRepository,
+                userMovieRatingRepository,
+                movieRepository
+        );
     }
-    
-    public void start(){
+
+    public void start() {
         io.displayMessage("Welcome to CinePhile");
         io.displayMessage("1. Login");
         io.displayMessage("2. Sign Up");
+        
         int choice = io.readInt("Choose an Option: ");
-        switch(choice){
+        switch (choice) {
             case 1 -> login();
             case 2 -> signup();
             default -> {
                 io.displayMessage("Invalid Choice. Exiting...");
                 return;
-            }    
+            }
         }
-        
-        if(loggedInUser != null){
+
+        if (loggedInUser != null) {
+            // Set up the navigation manager and register commands
             NavigationManager navManager = new NavigationManager(io);
-            navManager.registerCommand(1, new ViewAvailableMoviesCommand(io, uiHandler));
-            navManager.registerCommand(2, new AddMovieToListCommand(io, uiHandler, loggedInUser));
-            navManager.registerCommand(3, new ViewMovieListsCommand(io, uiHandler, loggedInUser));
+
+            // Pass the required services (and the logged-in user) to each command
+            navManager.registerCommand(1, new ViewAvailableMoviesCommand(io, movieService));
+            navManager.registerCommand(2, new AddMovieToListCommand(io,movieService, playlistService, loggedInUser));
+            navManager.registerCommand(3, new ViewMovieListsCommand(io, playlistService, loggedInUser));
             navManager.registerCommand(4, new LogoutCommand(this, navManager));
+
+            // Start navigation loop
             navManager.startNavigation();
-        } 
+        }
     }
-    
-    private void login(){
-        String username = io.readString("Enter Username or E-mail");
-        String password = io.readPassword("Enter Password");
-        
-        uiHandler.login(username, password)
-         .ifPresentOrElse(
-             user -> {
-                 loggedInUser = user;
-                 io.displayMessage("Welcome, " + user.getUsername() + "!");
-             },
-             () -> io.displayMessage("Invalid Username/E-mail or Password! Try Again.")
-                 
-         );
+
+    private void login() {
+        String usernameOrEmail = io.readString("Enter Username or E-mail: ");
+        String password = io.readPassword("Enter Password: ");
+
+        authenticationService.login(usernameOrEmail, password)
+            .ifPresentOrElse(
+                user -> {
+                    loggedInUser = user;
+                    io.displayMessage("Welcome, " + user.getUsername() + "!");
+                },
+                () -> io.displayMessage("Invalid Username/E-mail or Password! Try Again.")
+            );
     }
-    
-    private void signup(){
-        String username = io.readString("Enter your username");
-        String email = io.readString("Enter Email address");
-        String password = io.readString("Enter password");
-        
+
+    private void signup() {
+        String username = io.readString("Enter your username: ");
+        String email = io.readString("Enter your email address: ");
+        String password = io.readString("Enter your password: ");
+
         User newUser = new User(username, email, password);
+
+        authenticationService.signup(newUser)
+            .ifPresentOrElse(
+                user -> io.displayMessage("Sign up successful! Welcome, " + user.getUsername() + "!"),
+                () -> io.displayMessage("Error: Username or email already exists.")
+            );
         
-        uiHandler.signup(newUser)
-                .ifPresentOrElse(
-                        user -> io.displayMessage("Sign up successful! Welcome, " + newUser.getUsername() + "!"),
-                        () -> io.displayMessage("Error: Username or email already exists.")
-                );
         start();
     }
-    
-    public void logout(){
+
+    public void logout() {
         loggedInUser = null;
         io.displayMessage("Logging out...");
         start();
