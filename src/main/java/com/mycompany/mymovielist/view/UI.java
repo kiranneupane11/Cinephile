@@ -3,7 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.mymovielist.view;
-import com.mycompany.mymovielist.view.commands.*;
+import com.mycompany.mymovielist.commands.ViewAvailableMoviesCommand;
+import com.mycompany.mymovielist.commands.AddMovieToListCommand;
+import com.mycompany.mymovielist.commands.LogoutCommand;
+import com.mycompany.mymovielist.commands.ViewMovieListsCommand;
 import com.mycompany.mymovielist.model.*;
 import com.mycompany.mymovielist.service.*;
 import com.mycompany.mymovielist.util.*;

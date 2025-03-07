@@ -45,7 +45,7 @@ public class Movie extends BaseEntity{
     }
     
     public void setRating(double rating){
-        this.rating = Math.round(rating * 10) / 10.0 ;
+        this.rating = rating;
     }
     
     
